@@ -1,0 +1,26 @@
+{
+  "name": "broccoli-bem",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "sunflowerdeath",
+  "license": "zlib",
+  "dependencies": {
+    "broccoli": "^0.13.2",
+    "broccoli-concat": "0.0.12",
+    "broccoli-funnel": "^0.1.6",
+    "broccoli-merge-trees": "^0.2.1",
+    "broccoli-uglify-js": "^0.1.3",
+    "glob": "^4.0.6",
+    "minimatch": "^1.0.0",
+    "quick-temp": "^0.1.2",
+    "underscore": "^1.7.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.0.1",
+    "sinon": "^1.11.1"
+  }
+}

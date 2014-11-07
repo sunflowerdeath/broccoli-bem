@@ -1,0 +1,10 @@
+{
+	"blocks": [
+		{
+			"name": "block",
+			"items": [
+				"block__elem"
+			]
+		}
+	]
+}

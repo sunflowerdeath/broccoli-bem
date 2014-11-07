@@ -1,0 +1,13 @@
+{
+	"blocks": [
+		{
+			"name": "block",
+			"items": [
+				"block__elem"
+			]
+		}
+	],
+	"items": [
+		"index__elem"
+	]
+}

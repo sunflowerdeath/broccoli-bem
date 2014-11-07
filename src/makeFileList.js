@@ -19,21 +19,17 @@ var getLevelsDirs = function(levelsDir) {
 
 /**
  * Finds tech files matching deps in levels tree.
- * @param {function} readTree - Broccoli readTree function.
- * @param {Tree} levelsTree - Tree with levels.
+ * @param {Tree} levelsDir - Directory of levelsTree.
  * @param {Deps} deps - Bem deps object.
  * @param {string} suffix - Suffix of tech files.
  * @return {Promise} Promise resolving to FileList. 
  */
-var makeFileList = function(readTree, levelsTree, deps, suffix) {
-	return readTree(levelsTree)
-		.then(function(levelsDir) {
-			var levelsDirs = getLevelsDirs(levelsDir)
-			var files = _.flatten(_.map(levelsDirs, function(levelDir) {
-				return findTechFiles(levelDir, suffix)
-			}))
-			return matchDepsWithFiles(deps, files)
-		})
+var makeFileList = function(levelsDir, deps, suffix) {
+	var levelsDirs = getLevelsDirs(levelsDir)
+	var files = _.flatten(_.map(levelsDirs, function(levelDir) {
+		return findTechFiles(levelDir, suffix)
+	}))
+	return matchDepsWithFiles(deps, files)
 }
 
 module.exports = makeFileList

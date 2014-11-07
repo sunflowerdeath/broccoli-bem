@@ -23,7 +23,7 @@ var autoprefixer = {
 
 function loadTechs() {
 	var techs = {
-		css: require('./css')
+		css: require('.techBuilders/css')
 		//scss: require('./scss'),
 		//autoprefixer: autoprefixer
 	}
@@ -40,12 +40,10 @@ function loadTechs() {
 		
 		for (var i in nextTechs) {
 			var nextTechName = nextTechs[i]
-			var nextTechName = nextTechs[i]
 			var nextTech = techs[nextTechName]
 			if (!nextTech.prevTechs) nextTech.prevTechs = []
 			nextTech.prevTechs.push(techName)
 		}
-		
 	}
 	
 	return techs
@@ -62,7 +60,6 @@ function buildTechs(config, techs, deps) {
 
 
 function runTechs(techsList, config, techs, deps, results) {
-	console.log('run techs', techsList)
 	if (results === undefined) results = {}
 
 	for (var i in techsList) {
@@ -93,10 +90,18 @@ function runTechs(techsList, config, techs, deps, results) {
 	return results
 }
 
-function build(config) {
-	config = _.extend({}, DEFAULT_CONFIG, config)
+function Builder(config) {
+	if (!(this instanceof Builder)) return new Builder(config)
+	this.config = _.extend({}, DEFAULT_CONFIG, config)
+	
+	var cwd = process.cwd()
+	for (var i in this.config.levels) {
+		this.config.levels[i] = path.join(cwd, this.config.levels[i])
+	}
+}
 
-	var declName = config.declName
+Builder.prototype.read = function(readTree) {
+	var declName = this.config.declName
 	if (!declName) {
 		throw new Error('bem.build', 'Option "declName" is not specified')
 	}
@@ -109,10 +114,12 @@ function build(config) {
 	//postprocessors can have only one builder prevTech
 	//builders can have prev and next techs to other builders
 
-	var reader = new DeclReader(config.levels)
+	var reader = new DeclReader(this.config.levels)
 	var deps = makeDeps(declName, reader)
-
-	return buildTechs(config, techs, deps)
+	var tree = buildTechs(this.config, techs, deps)
+	return readTree(tree)
 }
 
-module.exports = build
+Builder.prototype.cleanup = function() {}
+
+module.exports = Builder

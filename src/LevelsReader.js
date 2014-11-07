@@ -1,7 +1,7 @@
-var _ = require('underscore'),
-		path = require('path'),
-		Funnel = require('broccoli-funnel'),
-		mergeTrees = require('broccoli-merge-trees')
+var _ = require('underscore')
+var path = require('path')
+var Funnel = require('broccoli-funnel')
+var mergeTrees = require('broccoli-merge-trees')
 
 var findTechFiles = require('./findTechFiles')
 var matchDepsWithFiles = require('./matchDepsWithFiles')
@@ -28,7 +28,7 @@ LevelsReader.prototype = {
 			return new Funnel(level, {
 				destDir: index + '',
 				files: _.map(matchedFiles, function(file) {
-					return path.relative(level, file)
+					return path.relative(level, file).replace('\\', '/')
 				})
 			})
 		})

@@ -1,7 +1,7 @@
-var fs = require('fs'),
-		path = require('path'),
-		_ = require('underscore'),
-		glob = require('glob')
+var fs = require('fs')
+var path = require('path')
+var _ = require('underscore')
+var glob = require('glob')
 
 var DeclReader = function(levels) {
 	this.levels = levels

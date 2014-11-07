@@ -1,6 +1,6 @@
-var _ = require('underscore'),
-		path = require('path'),
-		glob = require('glob')
+var _ = require('underscore')
+var path = require('path')
+var glob = require('glob')
 		
 /** TODO translate
  * Шаблон для поиска файлов без '.' внутри имени, кроме номера версии идущего

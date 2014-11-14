@@ -1,32 +1,24 @@
-var path = require('path')
 var _ = require('underscore')
 var mergeTrees = require('broccoli-merge-trees')
 
 var makeDeps = require('./makeDeps')
 var DeclReader = require('./DeclReader')
+var LevelsReader = require('./LevelsReader')
 
 var DEFAULT_CONFIG = {
-	deployDir: 'deploy',
 	deployPath: '/deploy',
 	techs: ['js', 'scss', 'css', 'img'],
 	levels: ['blocks'],
-	env: 'prod'
+	env: 'prod',
+	techModules: [
+		{
+			css: require('./techBuilders/css')
+		}
+	]
 }
 
-var autoprefixer = {
-	postprocessor: true,
-	prevTechs: ['css'],
-	build: function(config) {
-		//
-	}
-}
-
-function loadTechs() {
-	var techs = {
-		css: require('.techBuilders/css')
-		//scss: require('./scss'),
-		//autoprefixer: autoprefixer
-	}
+function loadTechs(techModules) {
+	var techs = _.extend.apply(_, techModules)
 	
 	for (var techName in techs) {
 		var tech = techs[techName]
@@ -55,9 +47,8 @@ function buildTechs(config, techs, deps) {
 	var withoutPreprocessors = _.filter(results, function(result, tech) {
 		if (!techs[tech].preprocessor) return result
 	})
-	return mergeTrees(withoutPreprocessors)
+	return mergeTrees(withoutPreprocessors, {overwrite: true})
 }
-
 
 function runTechs(techsList, config, techs, deps, results) {
 	if (results === undefined) results = {}
@@ -74,9 +65,13 @@ function runTechs(techsList, config, techs, deps, results) {
 		runTechs(tech.prevTechs, config, techs, deps, results)
 
 		var sourceTrees = _.values(_.pick(results, tech.prevTechs))
-		if (tech.Picker) sourceTrees.push(tech.Picker(deps, config))
-		var mergedSourceTree = mergeTrees(sourceTrees)
-		var result = tech.Builder(mergedSourceTree, deps, config)
+		if (tech.suffixes) {
+			for (var i in tech.suffixes) {
+				sourceTrees.push(new LevelsReader(config, deps, tech.suffixes[i]))
+			}
+		}
+		var mergedSourceTree = mergeTrees(sourceTrees, {overwrite: true})
+		var result = new tech.Tree(mergedSourceTree, deps, config)
 
 		if (tech.postprocessor) {
 			var processedTechName = tech.prevTechs[0]
@@ -93,30 +88,31 @@ function runTechs(techsList, config, techs, deps, results) {
 function Builder(config) {
 	if (!(this instanceof Builder)) return new Builder(config)
 	this.config = _.extend({}, DEFAULT_CONFIG, config)
-	
-	var cwd = process.cwd()
-	for (var i in this.config.levels) {
-		this.config.levels[i] = path.join(cwd, this.config.levels[i])
+	this.techs = loadTechs(this.config.techModules)
+
+	if (!this.config.declName) {
+		throw new Error('[broccoli-bem] Option "declName" is not specified.')
+	}
+
+	var unknown = _.difference(this.config.techs, _.keys(this.techs))
+	if (unknown.length) {
+		throw new Error('[broccoli-bem] Unknown techs: ' + unknown.join())
+	}
+
+	for (var i in this.techs) {
+		var tech = this.techs[i]
+		if (tech.changeConfig) this.config = tech.changeConfig(config)
 	}
 }
 
 Builder.prototype.read = function(readTree) {
-	var declName = this.config.declName
-	if (!declName) {
-		throw new Error('bem.build', 'Option "declName" is not specified')
-	}
-
-	var techs = loadTechs()
-
-	//check that techs in config are in techs
-
-	//preprocessors can have only builders nextTechs 
-	//postprocessors can have only one builder prevTech
-	//builders can have prev and next techs to other builders
-
 	var reader = new DeclReader(this.config.levels)
-	var deps = makeDeps(declName, reader)
-	var tree = buildTechs(this.config, techs, deps)
+	var deps = makeDeps(this.config.declName, reader)
+	for (var i in this.techs) {
+		var tech = this.techs[i]
+		if (tech.changeDeps) deps = tech.changeDeps(deps, reader)
+	}
+	var tree = buildTechs(this.config, this.techs, deps)
 	return readTree(tree)
 }
 

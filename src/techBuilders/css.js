@@ -1,54 +1,42 @@
 var _ = require('underscore')
-var pickFiles = require('broccoli-static-compiler')
 var mergeTrees = require('broccoli-merge-trees')
 var concat = require('broccoli-concat')
 var path = require('path')
 
-var LevelsReader = require('./LevelsReader')
-var makeFileList = require('./makeFileList')
+var findDepsFiles = require('../findDepsFiles')
 
-function Picker(deps, config) {
-	if (!(this instanceof Picker)) return new Picker(deps, config)
-	this.config = config
-	this.deps = deps
-}
+var SUFFIXES = ['css', 'ie8.css', 'ie9.css']
 
-Picker.prototype.read = function(readTree) {
-	return readTree(LevelsReader(this.config.levels, this.deps, '.css'))
-}
-
-Picker.prototype.cleanup = function() {}
-
-
-function Builder(levelsTree, deps, config) {
-  if (!(this instanceof Builder)) return new Builder(levelsTree, deps, config)
+function Tree(levelsTree, deps, config) {
+  if (!(this instanceof Tree)) return new Tree(levelsTree, deps, config)
 	this.levelsTree = levelsTree
 	this.deps = deps
 	this.config = config
 }
 
-Builder.prototype.read = function(readTree, destDir) {
+Tree.prototype.read = function(readTree) {
 	var self = this
 	return readTree(this.levelsTree)
 		.then(function(levelsDir) {
-			var fileList = makeFileList(levelsDir, self.deps, '.css')
-			var tree = mergeTrees(_.map(fileList, function(files, moduleName) {
-				var relFiles = _.map(files, function(file) {
-					return path.relative(levelsDir, file)
+			var trees = _.map(SUFFIXES, function(suffix) {
+				var depsFiles = findDepsFiles(levelsDir, self.deps, suffix)
+				return _.map(depsFiles, function(files, moduleName) {
+					var outputFile = path.join('/styles', moduleName + '.' + suffix).replace(/\\/g, '/')
+					return concat(levelsDir, {
+						inputFiles: files,
+						outputFile: outputFile,
+						wrapInFunction: false
+					})
 				})
-				return concat(self.levelsTree, {
-					inputFiles: relFiles,
-					outputFile: path.join('/styles', moduleName + '.css').replace(/\\/g, '/'),
-					wrapInFunction: false
-				})
-			}))
-			return readTree(tree)
+			})
+			var mergedTree = mergeTrees(_.flatten(trees))
+			return readTree(mergedTree)
 		})
 }
 
-Builder.prototype.cleanup = function() {}
+Tree.prototype.cleanup = function() {}
 
 module.exports = {
-	Picker: Picker,
-	Builder: Builder
+	suffixes: SUFFIXES,
+	Tree: Tree
 }

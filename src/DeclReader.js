@@ -57,7 +57,7 @@ DeclReader.prototype.traverse = function(name, callback, traversed) {
 		}
 	}
 	
-	for (var i in decl.items) {
+	for (i in decl.items) {
 		this.traverse(decl.items[i], callback, traversed)
 	}
 

@@ -1,5 +1,4 @@
 var _ = require('underscore')
-var mergeTrees = require('broccoli-merge-trees')
 var fs = require('fs')
 var path = require('path')
 
@@ -14,7 +13,7 @@ var getLevelsDirs = function(levelsDir) {
 /**
  * @typedef FileList
  * Object with list of files for each build module.
- * @type Object.<string, array.<string>>
+ * @type {Object.<string, array.<string>>}
  */
 
 /**

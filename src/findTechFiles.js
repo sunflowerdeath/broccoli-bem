@@ -29,7 +29,7 @@ var globArraySync = function(patterns, options) {
 function findFiles(dir, pattern) {
 	var excludeSubdirs = [] //this.config.excludeSubdirs TODO
 	var excludePatterns = _.map(excludeSubdirs, function(dir) {
-				return '!' + path.join(levelDir, '*', dir, '**') 
+				return '!' + path.join(dir, '*', dir, '**') 
 			}),
 			includePatterns = [path.join(dir, '**', pattern)],
 			patterns = [].concat(includePatterns, excludePatterns)

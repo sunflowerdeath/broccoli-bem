@@ -21,7 +21,7 @@ describe('LevelsReader', function() {
   })
 
 	it('creates dir with levels dirs named from 0', function() {
-		var tree = LevelsReader(LEVELS, DEPS, '.css')
+		var tree = LevelsReader(LEVELS, DEPS, 'css')
 		builder = new broccoli.Builder(tree)
 		return builder.build()
 			.then(function(results) {
@@ -32,7 +32,7 @@ describe('LevelsReader', function() {
 	})
 
 	it('puts matching tech files from levels to created folders', function() {
-		var tree = LevelsReader(LEVELS, DEPS, '.css')
+		var tree = LevelsReader(LEVELS, DEPS, 'css')
 		builder = new broccoli.Builder(tree)
 		return builder.build()
 			.then(function(results) {

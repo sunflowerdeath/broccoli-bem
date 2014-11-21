@@ -19,23 +19,22 @@ var LevelsReader = function(levels, deps, suffix) {
 	this.suffix = suffix
 }
 
-LevelsReader.prototype = {
-	read: function(readTree) {
-		var self = this
-		var levelsTrees = _.map(this.levels, function(level, index) {
-			var files = findTechFiles(level, self.suffix)
-			var matchedFiles = _.flatten(_.values(matchDepsWithFiles(self.deps, files)))
-			return new Funnel(level, {
-				destDir: index + '',
-				files: _.map(matchedFiles, function(file) {
-					return path.relative(level, file).replace('\\', '/')
-				})
+LevelsReader.prototype.read = function(readTree) {
+	var self = this
+	var levelsTrees = _.map(this.levels, function(level, index) {
+		var files = findTechFiles(level, self.suffix)
+		var matchedFiles = _.flatten(_.values(matchDepsWithFiles(self.deps, files)))
+		return new Funnel(level, {
+			destDir: index + '',
+			files: _.map(matchedFiles, function(file) {
+				return path.relative(level, file)
 			})
 		})
-		var mergedTree = mergeTrees(levelsTrees)
-		return readTree(mergedTree)
-	},
-	cleanup: function() {}
+	})
+	var mergedTree = mergeTrees(levelsTrees)
+	return readTree(mergedTree)
 }
+
+LevelsReader.prototype.cleanup = function() {}
 
 module.exports = LevelsReader

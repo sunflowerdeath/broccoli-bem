@@ -13,8 +13,9 @@
     "broccoli-concat": "0.0.12",
     "broccoli-funnel": "^0.1.6",
     "broccoli-merge-trees": "^0.2.1",
+    "broccoli-sass": "^0.3.3",
     "broccoli-uglify-js": "^0.1.3",
-    "glob": "^4.0.6",
+    "glob": "^3.2.11",
     "minimatch": "^1.0.0",
     "quick-temp": "^0.1.2",
     "underscore": "^1.7.0"

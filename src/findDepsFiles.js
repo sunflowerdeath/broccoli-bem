@@ -12,7 +12,8 @@ var getLevelsDirs = function(levelsDir) {
 
 /**
  * @typedef FileList
- * Object with list of files for each build module.
+ * Object with list of filepaths for each build module.
+ * Filepaths are relative to levelsDir.
  * @type {Object.<string, array.<string>>}
  */
 
@@ -23,12 +24,15 @@ var getLevelsDirs = function(levelsDir) {
  * @param {string} suffix - Suffix of tech files.
  * @return {Promise} Promise resolving to FileList. 
  */
-var makeFileList = function(levelsDir, deps, suffix) {
+var findDepsFiles = function(levelsDir, deps, suffix) {
 	var levelsDirs = getLevelsDirs(levelsDir)
 	var files = _.flatten(_.map(levelsDirs, function(levelDir) {
 		return findTechFiles(levelDir, suffix)
 	}))
-	return matchDepsWithFiles(deps, files)
+	var relFiles = _.map(files, function(file) {
+		return path.relative(levelsDir, file)
+	})
+	return matchDepsWithFiles(deps, relFiles)
 }
 
-module.exports = makeFileList
+module.exports = findDepsFiles

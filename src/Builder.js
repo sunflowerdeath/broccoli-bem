@@ -7,19 +7,20 @@ var LevelsReader = require('./LevelsReader')
 
 var DEFAULT_CONFIG = {
 	deployPath: '/deploy',
-	techs: ['js', 'scss', 'css', 'img'],
+	techs: ['scss', 'css'],
 	levels: ['blocks'],
 	env: 'prod',
 	techModules: [
 		{
-			css: require('./techBuilders/css')
+			css: require('./techs/css'),
+			scss: require('./techs/scss')
 		}
 	]
 }
 
 function loadTechs(techModules) {
 	var techs = _.extend.apply(_, techModules)
-	
+
 	for (var techName in techs) {
 		var tech = techs[techName]
 		tech.prevTechs = tech.prevTechs || []
@@ -29,7 +30,7 @@ function loadTechs(techModules) {
 	for (var techName in techs) {
 		var tech = techs[techName]
 		var nextTechs = tech.nextTechs || []
-		
+
 		for (var i in nextTechs) {
 			var nextTechName = nextTechs[i]
 			var nextTech = techs[nextTechName]
@@ -37,7 +38,7 @@ function loadTechs(techModules) {
 			nextTech.prevTechs.push(techName)
 		}
 	}
-	
+
 	return techs
 }
 
@@ -56,18 +57,18 @@ function runTechs(techsList, config, techs, deps, results) {
 	for (var i in techsList) {
 		var techName = techsList[i]
 		var tech = techs[techName]
-		
+
 		if (!tech) continue
 		if (results[techName]) continue
 		if (tech._mark) throw('Cycle on tech "' + techName + '"')
-		
+
 		tech._mark = true
 		runTechs(tech.prevTechs, config, techs, deps, results)
 
 		var sourceTrees = _.values(_.pick(results, tech.prevTechs))
 		if (tech.suffixes) {
 			for (var i in tech.suffixes) {
-				sourceTrees.push(new LevelsReader(config, deps, tech.suffixes[i]))
+				sourceTrees.push(new LevelsReader(config.levels, deps, tech.suffixes[i]))
 			}
 		}
 		var mergedSourceTree = mergeTrees(sourceTrees, {overwrite: true})
@@ -81,7 +82,7 @@ function runTechs(techsList, config, techs, deps, results) {
 		}
 		tech._mark = false
 	}
-	
+
 	return results
 }
 

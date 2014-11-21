@@ -10,7 +10,7 @@ var FakeDeclReader = sinon.spy(function() {})
 
 var fakeDeps = {}
 var fakeMakeDeps = sinon.spy(function() {
-	//returns empty object to compare with, because Techs & LevelsReader are fake and dont use deps
+	//returns empty object to compare with (Techs & LevelsReader are fake and dont use deps)
 	return fakeDeps
 })
 
@@ -74,30 +74,29 @@ describe('Builder', function() {
 		var bem = Builder(config)
 		
 		builder = new broccoli.Builder(bem)
-		return builder.build()
-			.then(function(result) {
-				//check that dependencies are used correctly
-				assert(FakeDeclReader.calledWith(config.levels))
+		return builder.build().then(function(result) {
+			//check that dependencies are used correctly
+			assert(FakeDeclReader.calledWith(config.levels))
 
-				var args = fakeMakeDeps.lastCall.args
-				assert.equal(args[0], config.declName)
-				assert(args[1] instanceof FakeDeclReader)
+			var args = fakeMakeDeps.lastCall.args
+			assert.equal(args[0], config.declName)
+			assert(args[1] instanceof FakeDeclReader)
 
-				//check that LevelsReader for tech is created
-				var args = FakeLevelsReader.lastCall.args
-				assert(args[0].isConfig)
-				assert.equal(args[1], fakeDeps)
-				assert.equal(args[2], suffix)
+			//check that LevelsReader for tech is created
+			var args = FakeLevelsReader.lastCall.args
+			assert.deepEqual(args[0], config.levels)
+			assert.equal(args[1], fakeDeps)
+			assert.equal(args[2], suffix)
 
-				//check that tech's Tree is created
-				var args = FakeTechTree.lastCall.args
-				assert.equal(args[1], fakeDeps)
-				assert(args[2].isConfig)
+			//check that tech's Tree is created
+			var args = FakeTechTree.lastCall.args
+			assert.equal(args[1], fakeDeps)
+			assert(args[2].isConfig)
 
-				//check that tech run and returns result (copied js files)
-				assert(FakeTechTree.prototype.read.called)
-				assert.deepEqual(fs.readdirSync(result.directory), ['index.js'])
-			})
+			//check that tech runs and returns result (copied js files)
+			assert(FakeTechTree.prototype.read.called)
+			assert.deepEqual(fs.readdirSync(result.directory), ['index.js'])
+		})
 	})
 	
 	it('changes deps with techs changeDeps methods', function() {
@@ -154,7 +153,7 @@ describe('Builder', function() {
 		}
 
 		var bem = Builder(config)
-		
+
 		builder = new broccoli.Builder(bem)
 		return builder.build().then(function() {
 			var readTree = FakeTechTree.prototype.read.lastCall.args[0]

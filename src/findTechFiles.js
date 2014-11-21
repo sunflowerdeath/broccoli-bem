@@ -38,7 +38,7 @@ function findFiles(dir, pattern) {
 
 /** Finds files with tech suffix in level dir. */
 var findTechFiles = function(dir, suffix) {
-	var pattern = SINGLE_EXTENSION_PATTERN + suffix
+	var pattern = SINGLE_EXTENSION_PATTERN + '.' + suffix
 	return findFiles(dir, pattern)
 }
 

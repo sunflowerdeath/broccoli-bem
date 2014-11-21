@@ -1,0 +1,9 @@
+{
+	"blocks": [
+		{"name": "block"},
+		{"name": "module"}
+	],
+	"items": [
+		"index__elem"
+	]
+}

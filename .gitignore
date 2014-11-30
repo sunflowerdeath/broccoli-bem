@@ -3,8 +3,8 @@ coverage
 node_modules
 
 temp
-
 tmp
+deploy
 
 [._]*.s[a-w][a-z]
 [._]s[a-w][a-z]

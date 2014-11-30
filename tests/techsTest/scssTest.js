@@ -20,10 +20,10 @@ describe('Builder', function() {
 	var builder
 
 	afterEach(function() {
-		//if (builder) builder.cleanup()
+		if (builder) builder.cleanup()
 	})
-	
-	xit('builds scss to css', function() {
+
+	it('builds scss to css', function() {
 		var config = _.defaults(CONFIG, {
 			levels: [path.join(DIR, 'blocks')]
 		})
@@ -38,10 +38,7 @@ describe('Builder', function() {
 		})
 	})
 
-	//mixins can be used from top level
-	//mixins are available in all types of files (ie8, ie9)
-	//and in all modules
-	it('mixins', function() {
+	it('mixins are available in scss files', function() {
 		var config = _.defaults(CONFIG, {
 			levels: [path.join(DIR, 'mixins')]
 		})
@@ -50,7 +47,10 @@ describe('Builder', function() {
 		builder = new broccoli.Builder(bem)
 		return builder.build().then(function(result) {
 			var dir = result.directory
-			console.log(dir)
+
+			var index = fs.readFileSync(path.join(dir, 'styles/index.css'), 'utf8')
+			var indexRef = fs.readFileSync(path.join(DIR, 'mixinsRef.css'), 'utf8')
+			assert.equal(index, indexRef)
 		})
 	})
 })

@@ -1,7 +1,7 @@
 var Bem = require('./src/Builder')
 
 module.exports = Bem({
-	declName: 'index',
+	blockName: 'index',
 	levels: [
 		'../bem-blocks/blocks'
 	]

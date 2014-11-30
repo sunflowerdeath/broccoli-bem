@@ -66,7 +66,7 @@ describe('Builder', function() {
 		var config = {
 			isConfig: true,
 			levels: ['level'],
-			declName: 'index',
+			blockName: 'index',
 			techs: ['tech'],
 			techModules: [{tech: fakeTech}]
 		}
@@ -79,7 +79,7 @@ describe('Builder', function() {
 			assert(FakeDeclReader.calledWith(config.levels))
 
 			var args = fakeMakeDeps.lastCall.args
-			assert.equal(args[0], config.declName)
+			assert.equal(args[0], config.blockName)
 			assert(args[1] instanceof FakeDeclReader)
 
 			//check that LevelsReader for tech is created
@@ -111,7 +111,7 @@ describe('Builder', function() {
 		}
 
 		var config = {
-			declName: 'index',
+			blockName: 'index',
 			techs: ['tech'],
 			techModules: [{tech: fakeTech}]
 		}
@@ -144,7 +144,7 @@ describe('Builder', function() {
 		}
 
 		var config = {
-			declName: 'index',
+			blockName: 'index',
 			techs: ['js', 'css'],
 			techModules: [{
 				js: jsTech,
@@ -173,7 +173,7 @@ describe('Builder', function() {
 })
 
 describe('Builder init', function() {
-	it('throws if declName is not specified', function() {
+	it('throws if blockName is not specified', function() {
 		var thrown
 		try {
 			Builder()
@@ -187,7 +187,7 @@ describe('Builder init', function() {
 		var thrown
 		try {
 			Builder({
-				declName: 'index',
+				blockName: 'index',
 				techs: ['unknown']
 			})
 		} catch(e) {
@@ -204,7 +204,7 @@ describe('Builder init', function() {
 		}
 		sinon.spy(tech.changeConfig)
 		var config = {
-			declName: 'index',
+			blockName: 'index',
 			techModules: [
 				{tech: tech}
 			],

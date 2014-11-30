@@ -13,7 +13,7 @@ describe('Builder', function() {
 		if (builder) builder.cleanup()
 	})
 	
-	it('builds css to concated files', function() {
+	it('builds css to concatenated files', function() {
 		var level = path.join(DIR, 'blocks')
 		var bem = Builder({
 			declName: 'index',
@@ -28,9 +28,11 @@ describe('Builder', function() {
 		return builder.build().then(function(result) {
 			var dir = result.directory
 			var index = fs.readFileSync(path.join(dir, 'styles/index.css'), 'utf8')
+			var ie8 = fs.readFileSync(path.join(dir, 'styles/index.ie8.css'), 'utf8')
 			var module = fs.readFileSync(path.join(dir, 'styles/module.css'), 'utf8')
 
 			var indexRef = fs.readFileSync(path.join(DIR, 'indexRef.css'), 'utf8')
+			var ie8Ref = fs.readFileSync(path.join(DIR, 'indexRef.css'), 'utf8')
 			var moduleRef = fs.readFileSync(path.join(DIR, 'moduleRef.css'), 'utf8')
 
 			assert.equal(index, indexRef)

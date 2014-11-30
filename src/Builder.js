@@ -7,11 +7,11 @@ var LevelsReader = require('./LevelsReader')
 
 var DEFAULT_CONFIG = {
 	deployPath: '/deploy',
-	techs: ['scss', 'css'],
+	techs: ['js', 'scss', 'css'],
 	levels: ['blocks'],
-	env: 'prod',
 	techModules: [
 		{
+			js: require('./techs/js'),
 			css: require('./techs/css'),
 			scss: require('./techs/scss')
 		}
@@ -91,13 +91,13 @@ function Builder(config) {
 	this.config = _.extend({}, DEFAULT_CONFIG, config)
 	this.techs = loadTechs(this.config.techModules)
 
-	if (!this.config.declName) {
-		throw new Error('[broccoli-bem] Option "declName" is not specified.')
+	if (!this.config.blockName) {
+		throw new Error('[broccoli-bem] Option "blockName" is not specified.')
 	}
 
 	var unknown = _.difference(this.config.techs, _.keys(this.techs))
 	if (unknown.length) {
-		throw new Error('[broccoli-bem] Unknown techs: ' + unknown.join())
+		throw new Error('[broccoli-bem] Unknown techs: ' + unknown.join() + '.')
 	}
 
 	for (var i in this.techs) {
@@ -108,7 +108,7 @@ function Builder(config) {
 
 Builder.prototype.read = function(readTree) {
 	var reader = new DeclReader(this.config.levels)
-	var deps = makeDeps(this.config.declName, reader)
+	var deps = makeDeps(this.config.blockName, reader)
 	for (var i in this.techs) {
 		var tech = this.techs[i]
 		if (tech.changeDeps) deps = tech.changeDeps(deps, reader)

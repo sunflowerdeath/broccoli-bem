@@ -8,7 +8,6 @@ var findDepsFiles = require('../findDepsFiles')
 var SUFFIXES = ['css', 'ie8.css', 'ie9.css']
 
 function Tree(levelsTree, deps, config) {
-  if (!(this instanceof Tree)) return new Tree(levelsTree, deps, config)
 	this.levelsTree = levelsTree
 	this.deps = deps
 	this.config = config

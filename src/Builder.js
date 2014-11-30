@@ -13,7 +13,8 @@ var DEFAULT_OPTIONS = {
 		{
 			js: require('./techs/js'),
 			css: require('./techs/css'),
-			scss: require('./techs/scss')
+			scss: require('./techs/scss'),
+			autoprefixer: require('./techs/autoprefixer')
 		}
 	]
 }

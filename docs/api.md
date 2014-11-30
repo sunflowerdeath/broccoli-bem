@@ -1,5 +1,10 @@
+API
+===
+
 Builder(options)
-================
+----------------
+
+Creates instance of builder plugin.
 
 ###options.blockName
 
@@ -48,7 +53,7 @@ techsModules: [
 ```
 
 Technology builders
-===================
+-------------------
 
 Technology builder is an object with following properties:
 
@@ -134,3 +139,9 @@ Default: `[]`
 
 List of technologies that are built after current.<br>
 LevelsTrees of next technologies will contain result of building current technology.
+
+###changeOptions
+
+Type: `function(options)`
+
+Function that can change builder's options.

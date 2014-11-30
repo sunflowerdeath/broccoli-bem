@@ -6,7 +6,7 @@ var _ = require('underscore')
 
 var Builder = require('../../src/Builder')
 
-describe('Builder', function() {
+describe('js', function() {
 	var DIR = path.join(__dirname, 'jsTest')
 
 	var OPTIONS = {

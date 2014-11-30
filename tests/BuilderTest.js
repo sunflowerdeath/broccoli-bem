@@ -3,7 +3,7 @@ var sinon = require('sinon')
 var broccoli = require('broccoli')
 var path = require('path')
 var fs = require('fs')
-var proxyquire = require('proxyquire')
+var proxyquire = require('proxyquire').noPreserveCache()
 
 //fake dependencies
 var FakeDeclReader = sinon.spy(function() {})
@@ -196,22 +196,22 @@ describe('Builder init', function() {
 		assert(thrown)
 	})
 
-	it('changes config with techs changeConfig method', function() {
+	it('changes options with techs changeOptions method', function() {
 		var tech = {
-			changeConfig: sinon.spy(function(config) {
-				config.changed = 'changed'
+			changeOptions: sinon.spy(function(options) {
+				options.changed = 'changed'
 			})
 		}
-		sinon.spy(tech.changeConfig)
-		var config = {
+		sinon.spy(tech.changeOptions)
+		var options = {
 			blockName: 'index',
 			techModules: [
 				{tech: tech}
 			],
 			techs: ['tech']
 		}
-		Builder(config)
-		assert(tech.changeConfig.calledWith(config))
-		assert.equal(config.changed, 'changed')
+		Builder(options)
+		assert(tech.changeOptions.calledWith(options))
+		assert.equal(options.changed, 'changed')
 	})
 })

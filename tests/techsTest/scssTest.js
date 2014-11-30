@@ -6,10 +6,10 @@ var _ = require('underscore')
 
 var Builder = require('../../src/Builder')
 
-describe('Builder', function() {
+describe('scss', function() {
 	var DIR = path.join(__dirname, 'scssTest')
 	var CONFIG = {
-		declName: 'index',
+		blockName: 'index',
 		techs: ['css', 'scss'],
 		techModules: [
 			{css: require('../../src/techs/css')},

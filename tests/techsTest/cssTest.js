@@ -5,7 +5,7 @@ var broccoli = require('broccoli')
 
 var Builder = require('../../src/Builder')
 
-describe('Builder', function() {
+describe('css', function() {
 	var DIR = path.join(__dirname, 'cssTest')
 	var builder
 
@@ -16,7 +16,7 @@ describe('Builder', function() {
 	it('builds css to concatenated files', function() {
 		var level = path.join(DIR, 'blocks')
 		var bem = Builder({
-			declName: 'index',
+			blockName: 'index',
 			techs: ['css'],
 			levels: [level],
 			techModules: [
@@ -32,10 +32,11 @@ describe('Builder', function() {
 			var module = fs.readFileSync(path.join(dir, 'styles/module.css'), 'utf8')
 
 			var indexRef = fs.readFileSync(path.join(DIR, 'indexRef.css'), 'utf8')
-			var ie8Ref = fs.readFileSync(path.join(DIR, 'indexRef.css'), 'utf8')
+			var ie8Ref = fs.readFileSync(path.join(DIR, 'ie8Ref.css'), 'utf8')
 			var moduleRef = fs.readFileSync(path.join(DIR, 'moduleRef.css'), 'utf8')
 
 			assert.equal(index, indexRef)
+			assert.equal(ie8, ie8Ref)
 			assert.equal(module, moduleRef)
 		})
 	})

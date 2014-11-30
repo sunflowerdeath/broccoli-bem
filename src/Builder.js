@@ -5,7 +5,7 @@ var makeDeps = require('./makeDeps')
 var DeclReader = require('./DeclReader')
 var LevelsReader = require('./LevelsReader')
 
-var DEFAULT_CONFIG = {
+var DEFAULT_OPTIONS = {
 	deployPath: '/deploy',
 	techs: ['js', 'scss', 'css'],
 	levels: ['blocks'],
@@ -42,16 +42,16 @@ function loadTechs(techModules) {
 	return techs
 }
 
-function buildTechs(config, techs, deps) {
-	var usedTechs = _.pick(techs, config.techs)
-	var results = runTechs(config.techs, config, usedTechs, deps)
+function buildTechs(options, techs, deps) {
+	var usedTechs = _.pick(techs, options.techs)
+	var results = runTechs(options.techs, options, usedTechs, deps)
 	var withoutPreprocessors = _.filter(results, function(result, tech) {
 		if (!techs[tech].preprocessor) return result
 	})
 	return mergeTrees(withoutPreprocessors, {overwrite: true})
 }
 
-function runTechs(techsList, config, techs, deps, results) {
+function runTechs(techsList, options, techs, deps, results) {
 	if (results === undefined) results = {}
 
 	for (var i in techsList) {
@@ -63,16 +63,16 @@ function runTechs(techsList, config, techs, deps, results) {
 		if (tech._mark) throw('Cycle on tech "' + techName + '"')
 
 		tech._mark = true
-		runTechs(tech.prevTechs, config, techs, deps, results)
+		runTechs(tech.prevTechs, options, techs, deps, results)
 
 		var sourceTrees = _.values(_.pick(results, tech.prevTechs))
 		if (tech.suffixes) {
 			for (var i in tech.suffixes) {
-				sourceTrees.push(new LevelsReader(config.levels, deps, tech.suffixes[i]))
+				sourceTrees.push(new LevelsReader(options.levels, deps, tech.suffixes[i]))
 			}
 		}
 		var mergedSourceTree = mergeTrees(sourceTrees, {overwrite: true})
-		var result = new tech.Tree(mergedSourceTree, deps, config)
+		var result = new tech.Tree(mergedSourceTree, deps, options)
 
 		if (tech.postprocessor) {
 			var processedTechName = tech.prevTechs[0]
@@ -86,34 +86,34 @@ function runTechs(techsList, config, techs, deps, results) {
 	return results
 }
 
-function Builder(config) {
-	if (!(this instanceof Builder)) return new Builder(config)
-	this.config = _.extend({}, DEFAULT_CONFIG, config)
-	this.techs = loadTechs(this.config.techModules)
+function Builder(options) {
+	if (!(this instanceof Builder)) return new Builder(options)
+	this.options = _.extend({}, DEFAULT_OPTIONS, options)
+	this.techs = loadTechs(this.options.techModules)
 
-	if (!this.config.blockName) {
+	if (!this.options.blockName) {
 		throw new Error('[broccoli-bem] Option "blockName" is not specified.')
 	}
 
-	var unknown = _.difference(this.config.techs, _.keys(this.techs))
+	var unknown = _.difference(this.options.techs, _.keys(this.techs))
 	if (unknown.length) {
 		throw new Error('[broccoli-bem] Unknown techs: ' + unknown.join() + '.')
 	}
 
 	for (var i in this.techs) {
 		var tech = this.techs[i]
-		if (tech.changeConfig) this.config = tech.changeConfig(config)
+		if (tech.changeOptions) this.options = tech.changeOptions(options)
 	}
 }
 
 Builder.prototype.read = function(readTree) {
-	var reader = new DeclReader(this.config.levels)
-	var deps = makeDeps(this.config.blockName, reader)
+	var reader = new DeclReader(this.options.levels)
+	var deps = makeDeps(this.options.blockName, reader)
 	for (var i in this.techs) {
 		var tech = this.techs[i]
 		if (tech.changeDeps) deps = tech.changeDeps(deps, reader)
 	}
-	var tree = buildTechs(this.config, this.techs, deps)
+	var tree = buildTechs(this.options, this.techs, deps)
 	return readTree(tree)
 }
 

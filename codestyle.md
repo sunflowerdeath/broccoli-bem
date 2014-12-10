@@ -30,7 +30,7 @@ var a = 123,
 
 Not used, except in the following situations:
 
-* Loops  `for (;;)`
+* `for (;;)` loops
 * Empty loops `while (something);`
 * `case 'foo': doSomething(); break`
 * In front of symbols `(`, `[`, `-`, `+` and `/` at the start of the line.
@@ -44,7 +44,7 @@ Curly braces are on the same line as the thing that requires them.
 When braces are optional, do not use them, if the entire expression is on the same line.
 If the expression is on the next line, braces are required.
 
-```
+```js
 if (condition) doSomething()
 if (condition) {
   doSomething()
@@ -67,7 +67,7 @@ Do not use space:
 
 Use single space to separate all other keywords and binary operators.
 
-```
+```js
 var arr = [1, 2, 3]
 var obj = {a: 1, b: 2, c: 3}
 var fn = function(a, b) {

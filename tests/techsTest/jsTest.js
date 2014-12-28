@@ -24,7 +24,6 @@ describe('js', function() {
 		if (builder) builder.cleanup()
 	})
 
-
 	var checkOccurence = function(str, items) {
 		for (var i in items) {
 			if (str.indexOf(items[i]) === -1) return false

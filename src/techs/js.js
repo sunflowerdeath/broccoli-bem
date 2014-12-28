@@ -51,8 +51,6 @@ Tree.prototype.write = function(readTree, destDir) {
 	})
 }
 
-Tree.prototype.cleanup = function() {}
-
 module.exports = {
 	suffixes: SUFFIXES,
 	Tree: Tree

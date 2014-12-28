@@ -75,7 +75,7 @@ describe('Builder', function() {
 		
 		builder = new broccoli.Builder(bem)
 		return builder.build().then(function(result) {
-			//check that dependencies are used correctly
+			//check that dependencies are created correctly
 			assert(FakeDeclReader.calledWith(config.levels))
 
 			var args = fakeMakeDeps.lastCall.args

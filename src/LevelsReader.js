@@ -7,13 +7,15 @@ var findTechFiles = require('./findTechFiles')
 var matchDepsWithFiles = require('./matchDepsWithFiles')
 
 /**
- * Reads tech files matching to deps from levels to tree.
- * @param {Array.<string>} levels - Levels paths.
- * @param {Deps} deps - Bem deps object.
- * @param {string} suffix - Suffix of tech files.
+ * Prepares tree for tech builder.
+ * Copies files of specific tech matching to deps from levels dirs to new tree.
+ * Levels dirs names are incremented from '0'.
+ * @param levels {Array.<string>} Levels paths.
+ * @param deps {Deps} Bem deps object.
+ * @param suffix {string} Suffix of tech files.
  */
 var LevelsReader = function(levels, deps, suffix) {
-  if (!(this instanceof LevelsReader)) return new LevelsReader(levels, deps, suffix)
+	if (!(this instanceof LevelsReader)) return new LevelsReader(levels, deps, suffix)
 	this.levels = levels
 	this.deps = deps
 	this.suffix = suffix

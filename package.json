@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha tests --recursive"
   },
   "author": "sunflowerdeath",
-  "license": "zlib",
+  "license": "public domain",
   "dependencies": {
     "broccoli": "^0.13.2",
     "broccoli-autoprefixer": "^2.0.0",
@@ -16,8 +16,9 @@
     "broccoli-merge-trees": "^0.2.1",
     "broccoli-sass": "^0.3.3",
     "broccoli-uglify-js": "^0.1.3",
+    "broccoli-webfont": "0.0.0",
     "broccoli-writer": "^0.1.1",
-    "glob": "^3.2.11",
+    "glob": "^4.0.5",
     "minimatch": "^1.0.0",
     "quick-temp": "^0.1.2",
     "uglify-js": "^2.4.15",

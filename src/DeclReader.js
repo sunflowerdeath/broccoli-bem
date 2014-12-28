@@ -14,8 +14,8 @@ DeclReader.prototype.findDeclFiles = function() {
 	var result = []
 
 	for (var i in this.levels) {
-		var declPattern = path.join(this.levels[i].trim(), '**/*.decl.json'),
-				files = glob.sync(declPattern)
+		var declPattern = path.join(this.levels[i].trim(), '**/*.decl.json')
+		var files = glob.sync(declPattern)
 		result.push(files)
 	}
 
@@ -27,8 +27,8 @@ DeclReader.prototype.groupDeclFiles = function(files) {
 	var map = {}
 
 	for (var i in files) {
-		var filename = files[i],
-				blockname = path.basename(filename, '.decl.json')
+		var filename = files[i]
+		var blockname = path.basename(filename, '.decl.json')
 
 		if (!map[blockname]) map[blockname] = []
 		map[blockname].push(filename)
@@ -66,8 +66,8 @@ DeclReader.prototype.traverse = function(name, callback, traversed) {
 
 /** Reads and parses decl's files. */
 DeclReader.prototype.readDeclFromFiles = function(name) {
-	var decl = {items: [], blocks: []},
-			files = this.files[name]
+	var decl = {items: [], blocks: []}
+	var files = this.files[name]
 
 	if (!files) return decl
 
@@ -93,8 +93,8 @@ DeclReader.prototype.mergeDecls = function(target, source) {
 
 	if (source.blocks) {
 		for (var i in source.blocks) {
-			var block = source.blocks[i],
-					blockName = block.name
+			var block = source.blocks[i]
+			var blockName = block.name
 			if (!block.items) block.items = []
 
 			var targetBlock = _.findWhere(target.blocks, {name: blockName})
@@ -109,8 +109,8 @@ DeclReader.prototype.mergeDecls = function(target, source) {
 	target.module = target.module || source.module
 	target.deferred = target.deferred || source.deferred
 
+	var handled = ['items', 'blocks', 'module', 'deferred']
 	_.each(source, function(val, key) {
-		var handled = ['items', 'blocks', 'module', 'deferred']
 		if (!_.contains(handled, key)) target[key] = val
 	})
 }

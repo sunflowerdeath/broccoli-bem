@@ -19,10 +19,10 @@ var getLevelsDirs = function(levelsDir) {
 
 /**
  * Finds tech files matching deps in levels tree.
- * @param {Tree} levelsDir - Directory of levelsTree.
- * @param {Deps} deps - Bem deps object.
- * @param {string} suffix - Suffix of tech files.
- * @return {Promise} Promise resolving to FileList. 
+ * @param levelsDir {Tree} Directory of levelsTree.
+ * @param deps {Deps} Bem deps object.
+ * @param suffix {string} Suffix of tech files.
+ * @return {FileList}
  */
 var findDepsFiles = function(levelsDir, deps, suffix) {
 	var levelsDirs = getLevelsDirs(levelsDir)

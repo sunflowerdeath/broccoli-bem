@@ -12,27 +12,27 @@ var SINGLE_EXTENSION_PATTERN = '*([^.])*(.[0-9])'
 
 var globArraySync = function(patterns, options) {
 	if (options === undefined) options = {}
-  var result = []
-  _.each(patterns, function(pattern) {
-    var exclusion = pattern.indexOf('!') === 0
-    if (exclusion) pattern = pattern.slice(1)
-    var matches = glob.sync(pattern, options)
-    if (exclusion) {
-      result = _.difference(result, matches)
-    } else {
-      result = _.union(result, matches)
-    }
-  })
-  return result
+	var result = []
+	_.each(patterns, function(pattern) {
+		var exclusion = pattern.indexOf('!') === 0
+		if (exclusion) pattern = pattern.slice(1)
+		var matches = glob.sync(pattern, options)
+		if (exclusion) {
+			result = _.difference(result, matches)
+		} else {
+			result = _.union(result, matches)
+		}
+	})
+	return result
 }
 
 function findFiles(dir, pattern) {
 	var excludeSubdirs = [] //this.config.excludeSubdirs TODO
 	var excludePatterns = _.map(excludeSubdirs, function(dir) {
-				return '!' + path.join(dir, '*', dir, '**') 
-			}),
-			includePatterns = [path.join(dir, '**', pattern)],
-			patterns = [].concat(includePatterns, excludePatterns)
+		return '!' + path.join(dir, '*', dir, '**') 
+	})
+	var includePatterns = [path.join(dir, '**', pattern)]
+	var patterns = [].concat(includePatterns, excludePatterns)
 	return globArraySync(patterns)
 }
 

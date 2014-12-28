@@ -14,13 +14,13 @@ function getDeclsData(declName, reader) {
 			if (arr.indexOf(name) == -1) arr.push(name)
 		}
 	})
-	
+
 	return data
 }
 
 function makeDeclDeps(declName, decls, deferred, deferredModules) {
-	var deps = [],
-			decl = decls[declName]
+	var deps = []
+	var decl = decls[declName]
 
 	for (var i in decl.blocks) {
 		var block = decl.blocks[i]
@@ -47,19 +47,25 @@ function makeItemsDeps(items, decls, deferred, deferredModules) {
 	return deps
 }
 
+/**
+ * @param declName {string}
+ * @param reader {DeclReader}
+ * @return List of deps of each module.
+ */
 function makeDeps(declName, reader) {
-	var declsData = getDeclsData(declName, reader),
-			modules = declsData.modules,
-			deferredModules = declsData.deferredModules,
-			decls = declsData.decls,
-			deps = {}
+	var declsData = getDeclsData(declName, reader)
+	var modules = declsData.modules
+	var deferredModules = declsData.deferredModules
+	var decls = declsData.decls
+	var deps = {}
 
 	modules = _.union(modules, [declName], deferredModules)
 
 	for (var i in modules) {
-		var moduleName = modules[i],
-				deferred = deferredModules.indexOf(moduleName) != -1,
-				moduleDeps = makeDeclDeps(moduleName, decls, deferred, deferredModules)
+		var moduleName = modules[i]
+		var deferred = deferredModules.indexOf(moduleName) != -1
+		var moduleDeps = makeDeclDeps(moduleName, decls, deferred, deferredModules)
+		//deps of module are its deps without deps of prev modules
 		deps[moduleName] = _.difference(moduleDeps, _.flatten(_.values(deps)))
 	}
 

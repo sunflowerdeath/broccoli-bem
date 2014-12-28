@@ -10,8 +10,8 @@ var matchModuleDepsWithFiles = function(moduleDeps, files) {
 var matchDepsWithFiles = function(deps, files) {
 	var fileList = {}
 	for (var moduleName in deps) {
-		var moduleDeps = deps[moduleName],
-				moduleFileList = matchModuleDepsWithFiles(moduleDeps, files)
+		var moduleDeps = deps[moduleName]
+		var moduleFileList = matchModuleDepsWithFiles(moduleDeps, files)
 		if (moduleFileList.length) {
 			fileList[moduleName] = moduleFileList
 		}

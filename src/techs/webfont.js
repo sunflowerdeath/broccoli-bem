@@ -3,43 +3,35 @@ var _ = require('underscore')
 var mergeTrees = require('broccoli-merge-trees')
 var webfont = require('broccoli-webfont')
 
-var findDepsFiles = require('../findDepsFiles')
+var TechBuilder = require('../techBuilder')
 
 var SUFFIXES = ['icon.svg']
 
 function Tree(levelsTree, deps, options) {
-	this.levelsTree = levelsTree
-	this.deps = deps
-	this.options = options
+	options.suffixes = SUFFIXES
+	TechBuilder.apply(this, arguments)
 }
 
-Tree.prototype.read = function(readTree) {
+Tree.prototype = Object.create(TechBuilder.prototype)
+Tree.prototype.description = 'Webfont tech'
+
+Tree.prototype.build = function(depsGlobs, levelsDir) {
 	var _this = this
-	if (!this.cachedResult) {
-		this.cachedResult = readTree(this.levelsTree).then(function(levelsDir) {
-			var depsFiles = findDepsFiles(levelsDir, _this.deps, SUFFIXES[0])
-			var trees = _.compact(_.map(depsFiles, function(files, moduleName) {
-				if (!files.length) return
-				return webfont(levelsDir, {
-					files: files,
-					fontName: moduleName,
-					dest: 'fonts',
-					cssDest: path.join('fonts', moduleName + '.mix.scss'),
-					cssTemplateType: 'scss',
-					cssFontsPath: path.join(_this.options.deployPath, 'images'),
-					rename: function(file) {
-						return path.basename(file, '.icon.svg')
-					}
-				})
-			}))
-			var mergedTree = mergeTrees(_.flatten(trees))
-			return readTree(mergedTree)
+	var trees = _.map(depsGlobs['icon.svg'], function(moduleGlobs, moduleName) {
+		return webfont(levelsDir, {
+			files: moduleGlobs,
+			fontName: moduleName,
+			dest: 'fonts',
+			cssDest: path.join('fonts', moduleName + '.mix.scss'),
+			cssTemplateType: 'scss',
+			cssFontsPath: path.join(_this.options.deployPath, 'images'),
+			rename: function(file) {
+				return path.basename(file, '.icon.svg')
+			}
 		})
-	}
-	return this.cachedResult
+	})
+	return mergeTrees(trees)
 }
-
-Tree.prototype.cleanup = function() {}
 
 module.exports = {
 	preprocessor: true,

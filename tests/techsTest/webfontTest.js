@@ -19,10 +19,7 @@ describe('webfont', function() {
 		var bem = Builder({
 			blockName: 'index',
 			techs: ['webfont'],
-			levels: [level],
-			techModules: [
-				{css: require('../../src/techs/css')}
-			]
+			levels: [level]
 		})
 	})
 })

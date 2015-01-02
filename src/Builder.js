@@ -10,15 +10,11 @@ var DEFAULT_OPTIONS = {
 	techs: ['js', 'scss', 'css'],
 	levels: ['blocks'],
 	techModules: [
-		{
-			js: require('./techs/js'),
-			css: require('./techs/css'),
-			scss: require('./techs/scss'),
-			autoprefixer: require('./techs/autoprefixer')
-		}
+		require('./techs')
 	]
 }
 
+//TODO rename functions: it moves techs deps from next to previous
 function loadTechs(techModules) {
 	var techs = _.extend.apply(_, techModules)
 
@@ -27,7 +23,7 @@ function loadTechs(techModules) {
 		tech.prevTechs = tech.prevTechs || []
 	}
 
-	//move nextTechs to prevTechs
+	//moves nextTechs to prevTechs
 	for (var techName in techs) {
 		var tech = techs[techName]
 		var nextTechs = tech.nextTechs || []
@@ -43,6 +39,7 @@ function loadTechs(techModules) {
 	return techs
 }
 
+//it 1) takes needed techs 2) runs them 3) make and returns result
 function buildTechs(options, techs, deps) {
 	var usedTechs = _.pick(techs, options.techs)
 	var results = runTechs(options.techs, options, usedTechs, deps)
@@ -52,6 +49,7 @@ function buildTechs(options, techs, deps) {
 	return mergeTrees(withoutPreprocessors, {overwrite: true})
 }
 
+//it runs techs and their dependencies recursively
 function runTechs(techsList, options, techs, deps, results) {
 	if (results === undefined) results = {}
 
@@ -93,12 +91,16 @@ function Builder(options) {
 	this.techs = loadTechs(this.options.techModules)
 
 	if (!this.options.blockName) {
-		throw new Error('[broccoli-bem] Option "blockName" is not specified.')
+		throw new Error('[broccoli-bem] Option "blockName" is required')
+	}
+
+	if (!Array.isArray(this.options.levels)) {
+		throw new Error('[broccoli-bem] Option "levels" must be an array')
 	}
 
 	var unknown = _.difference(this.options.techs, _.keys(this.techs))
 	if (unknown.length) {
-		throw new Error('[broccoli-bem] Unknown techs: ' + unknown.join() + '.')
+		throw new Error('[broccoli-bem] Unknown techs: ' + unknown.join())
 	}
 
 	for (var i in this.techs) {
@@ -114,6 +116,7 @@ Builder.prototype.read = function(readTree) {
 		var tech = this.techs[i]
 		if (tech.changeDeps) deps = tech.changeDeps(deps, reader)
 	}
+	//TODO cache and invalidate cache when deps changed
 	var tree = buildTechs(this.options, this.techs, deps)
 	return readTree(tree)
 }

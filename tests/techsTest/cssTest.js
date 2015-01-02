@@ -13,15 +13,19 @@ describe('css', function() {
 		if (builder) builder.cleanup()
 	})
 	
+	var checkOccurence = function(str, items) {
+		for (var i in items) {
+			if (str.indexOf(items[i]) === -1) return false
+		}
+		return true
+	}
+
 	it('builds css to concatenated files', function() {
 		var level = path.join(DIR, 'blocks')
 		var bem = Builder({
 			blockName: 'index',
 			techs: ['css'],
-			levels: [level],
-			techModules: [
-				{css: require('../../src/techs/css')}
-			]
+			levels: [level]
 		})
 
 		builder = new broccoli.Builder(bem)
@@ -31,13 +35,9 @@ describe('css', function() {
 			var ie8 = fs.readFileSync(path.join(dir, 'styles/index.ie8.css'), 'utf8')
 			var module = fs.readFileSync(path.join(dir, 'styles/module.css'), 'utf8')
 
-			var indexRef = fs.readFileSync(path.join(DIR, 'indexRef.css'), 'utf8')
-			var ie8Ref = fs.readFileSync(path.join(DIR, 'ie8Ref.css'), 'utf8')
-			var moduleRef = fs.readFileSync(path.join(DIR, 'moduleRef.css'), 'utf8')
-
-			assert.equal(index, indexRef)
-			assert.equal(ie8, ie8Ref)
-			assert.equal(module, moduleRef)
+			assert(checkOccurence(index, ['block', 'block__elem', 'index', 'index__elem']))
+			assert(checkOccurence(ie8, ['indexie8']), 'browser specific code is built separately')
+			assert(checkOccurence(module, ['module']), 'modules are built separately')
 		})
 	})
 })

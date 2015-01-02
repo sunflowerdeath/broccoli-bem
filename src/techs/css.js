@@ -1,38 +1,44 @@
 var _ = require('underscore')
-var mergeTrees = require('broccoli-merge-trees')
-var concat = require('broccoli-concat')
 var path = require('path')
+var mergeTrees = require('broccoli-merge-trees')
 
-var findDepsFiles = require('../findDepsFiles')
+var TechBuilder = require('../techBuilder')
+var Concat = require('../plugins/concat')
 
 var SUFFIXES = ['css', 'ie8.css', 'ie9.css']
 
-function Tree(levelsTree, deps, config) {
-	this.levelsTree = levelsTree
-	this.deps = deps
-	this.config = config
+function Tree(levelsTree, deps, options) {
+	options.suffixes = SUFFIXES
+	TechBuilder.apply(this, arguments)
 }
 
-Tree.prototype.read = function(readTree) {
-	var self = this
-	return readTree(this.levelsTree).then(function(levelsDir) {
-		var trees = _.map(SUFFIXES, function(suffix) {
-			var depsFiles = findDepsFiles(levelsDir, self.deps, suffix)
-			return _.map(depsFiles, function(files, moduleName) {
-				var outputFile = path.join('/styles', moduleName + '.' + suffix)
-				return concat(levelsDir, {
-					inputFiles: files,
-					outputFile: outputFile,
-					wrapInFunction: false
-				})
-			})
+Tree.prototype = Object.create(TechBuilder.prototype)
+Tree.prototype.description = 'Css tech'
+
+Tree.prototype.build = function(readTree, depsGlobs) {
+	if (!this.cachedTree) this.cachedTree = this.createTree(depsGlobs)
+	return readTree(this.cachedTree)
+}
+
+Tree.prototype.createTree = function(depsGlobs) {
+	var _this = this
+	var trees = _.flatten(_.map(depsGlobs, function(suffixGlobs, suffix) {
+		return _.map(suffixGlobs, function(moduleGlobs, moduleName) {
+			return _this.createConcat(moduleGlobs, moduleName, suffix)
 		})
-		var mergedTree = mergeTrees(_.flatten(trees))
-		return readTree(mergedTree)
-	})
+	}))
+	return mergeTrees(trees)
 }
 
-Tree.prototype.cleanup = function() {}
+Tree.prototype.createConcat = function(globs, moduleName, suffix) {
+	var dest = path.join('styles', moduleName + '.' + suffix)
+	var result = Concat(this.levelsTree, {
+		files: globs,
+		dest: dest
+	})
+	//css minify?
+	return result
+}
 
 module.exports = {
 	suffixes: SUFFIXES,

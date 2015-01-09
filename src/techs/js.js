@@ -2,22 +2,25 @@ var _ = require('underscore')
 var path = require('path')
 var mergeTrees = require('broccoli-merge-trees')
 
-var TechBuilder = require('../techBuilder')
+var makeDepsGlobs = require('../makeDepsGlobs')
 var Concat = require('../plugins/concat')
 var Uglify = require('../plugins/uglify')
 
 var SUFFIXES = ['js', 'ie8.js', 'ie9.js']
 
 function Tree(levelsTree, deps, options) {
-	options.suffixes = SUFFIXES
-	TechBuilder.apply(this, arguments)
+	this.levelsTree = levelsTree
+	this.deps = deps
+	this.options = options
 }
 
-Tree.prototype = Object.create(TechBuilder.prototype)
 Tree.prototype.description = 'Js tech'
 
-Tree.prototype.build = function(readTree, depsGlobs) {
-	if (!this.cachedTree) this.cachedTree = this.createTree(depsGlobs)
+Tree.prototype.read = function(readTree, depsGlobs) {
+	if (!this.cachedTree) {
+		var depsGlobs = makeDepsGlobs(this.deps)
+		this.cachedTree = this.createTree(depsGlobs)
+	}
 	return readTree(this.cachedTree)
 }
 

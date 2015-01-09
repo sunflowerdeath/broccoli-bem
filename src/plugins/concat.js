@@ -2,8 +2,9 @@ var path = require('path')
 var CachingWriter = require('broccoli-glob-caching-writer')
 var SourcemapConcat = require('fast-sourcemap-concat')
 
-var Concat = function(inputTrees, options) {
-	if (!(this instanceof Concat)) return new Concat(inputTrees, options)
+var Concat = function(inputTree, options) {
+	if (!(this instanceof Concat)) return new Concat(inputTree, options)
+	if (!options) options = {}
 	if (options.dest === undefined) {
 		throw new Error('[broccoli-concat] Option "dest" is required')
 	}
@@ -16,11 +17,13 @@ var Concat = function(inputTrees, options) {
 Concat.prototype = Object.create(CachingWriter.prototype)
 Concat.prototype.description = 'Concat'
 
-Concat.prototype.updateCache = function(srcDirs, destDir, files) {
+Concat.prototype.updateCache = function(srcDir, destDir, files) {
+	if (!files.length) return
 	var sourcemap = new SourcemapConcat({
-		outputFile: path.join(this.destDir, this.options.dest),
-		mapFile: path.join(this.destDir, this.options.mapDest),
-		mapURL: this.options.mapUrl
+		outputFile: path.join(destDir, this.options.dest),
+		mapFile: path.join(destDir, this.options.mapDest),
+		mapURL: this.options.mapUrl,
+		baseDir: srcDir
 	})
 	if (this.options.header) sourcemap.addSpace(this.options.header)
 	files.forEach(function(file) {

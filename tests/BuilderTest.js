@@ -14,12 +14,12 @@ var fakeMakeDeps = sinon.spy(function() {
 	return fakeDeps
 })
 
-var FakeLevelsReader = function(deps, config, suffix) {
-	this.suffix = suffix
+var FakeLevelsReader = function(deps, config, suffixes) {
+	this.suffixes = suffixes
 }
 FakeLevelsReader.prototype.read = sinon.spy(function() {
 	//returns existing directory
-	return path.join(__dirname, 'BuilderTest', this.suffix)
+	return path.join(__dirname, 'BuilderTest', this.suffixes[0])
 })
 FakeLevelsReader.prototype.cleanup = function() {}
 FakeLevelsReader = sinon.spy(FakeLevelsReader)

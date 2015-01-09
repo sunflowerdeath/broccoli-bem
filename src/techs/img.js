@@ -1,7 +1,6 @@
-var _ = require('underscore')
-var Funnel = require('broccoli-funnel')
+var sieve = require('broccoli-file-sieve')
 
-var findDepsFiles = require('../findDepsFiles')
+var makeDepsGlobs = require('../makeDepsGlobs')
 
 var SUFFIXES = [
 	'png', 'gif', 'jpg', 'jpeg', 'svg',
@@ -13,17 +12,15 @@ function Tree(levelsTree, deps) {
 	this.deps = deps
 }
 
-Tree.prototype.read = function(readTree) {
-	var self = this
-	return readTree(this.levelsTree).then(function(levelsDir) {
-		var files = _.flatten(_.map(SUFFIXES, function(suffix) {
-			var depsFiles = findDepsFiles(levelsDir, self.deps, suffix)
-			return _.flatten(_.values(depsFiles))
-		}))
+Tree.prototype.description = 'Img tech'
 
-		return readTree(new Funnel(levelsDir, {
-			files: files,
-			getDestinationPath: function() { return '' }
+Tree.prototype.read = function(readTree) {
+	var _this = this
+	return readTree(this.levelsTree).then(function(levelsDir) {
+		var globs = makeDepsGlobs(_this.deps, SUFFIXES, true)
+		return readTree(sieve(levelsDir, {
+			files: globs,
+			changeFilePath: function() { return '' }
 		}))
 	})
 }

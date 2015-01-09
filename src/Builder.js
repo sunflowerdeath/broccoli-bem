@@ -39,7 +39,7 @@ function loadTechs(techModules) {
 	return techs
 }
 
-//it 1) takes needed techs 2) runs them 3) make and returns result
+//it 1) takes list of techs 2) runs them 3) merges results and returns it
 function buildTechs(options, techs, deps) {
 	var usedTechs = _.pick(techs, options.techs)
 	var results = runTechs(options.techs, options, usedTechs, deps)
@@ -49,7 +49,7 @@ function buildTechs(options, techs, deps) {
 	return mergeTrees(withoutPreprocessors, {overwrite: true})
 }
 
-//it runs techs and their dependencies recursively
+//it runs techs and their dependent techs recursively
 function runTechs(techsList, options, techs, deps, results) {
 	if (results === undefined) results = {}
 
@@ -66,9 +66,7 @@ function runTechs(techsList, options, techs, deps, results) {
 
 		var sourceTrees = _.values(_.pick(results, tech.prevTechs))
 		if (tech.suffixes) {
-			for (var i in tech.suffixes) {
-				sourceTrees.push(new LevelsReader(options.levels, deps, tech.suffixes[i]))
-			}
+			sourceTrees.push(new LevelsReader(options.levels, deps, tech.suffixes))
 		}
 		var mergedSourceTree = mergeTrees(sourceTrees, {overwrite: true})
 		var result = new tech.Tree(mergedSourceTree, deps, options)

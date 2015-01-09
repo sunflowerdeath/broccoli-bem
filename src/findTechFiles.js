@@ -2,14 +2,14 @@ var _ = require('underscore')
 var path = require('path')
 var glob = require('glob')
 		
-/** TODO translate
- * Шаблон для поиска файлов без '.' внутри имени, кроме номера версии идущего
- * в конце '.', например, 'jquery-1.8.1'.
- * Используется для работе с технологиями, которые имеют '.' в суффиксе,
- * например, '*.sprite.png' и '*.ie8.css'.
+/**
+ * Glob pattern for filenames without '.' in the name, except version number
+ * at the end. For example, 'jquery-1.8.1'.
+ * It allows techs to have '.' in suffixes, for example, '*.sprite.png', '*.ie8.css'.
  */
 var SINGLE_EXTENSION_PATTERN = '*([^.])*(.[0-9])'
 
+//TODO change this function with multiple-glob or dirmatch
 var globArraySync = function(patterns, options) {
 	if (options === undefined) options = {}
 	var result = []
@@ -34,6 +34,7 @@ function findFiles(dir, pattern) {
 	var includePatterns = [path.join(dir, '**', pattern)]
 	var patterns = [].concat(includePatterns, excludePatterns)
 	return globArraySync(patterns)
+	//TODO glob must have nodir: true, dir may have name 'some.js'
 }
 
 /** Finds files with tech suffix in level dir. */

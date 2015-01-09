@@ -1,10 +1,8 @@
 var _ = require('underscore')
-var path = require('path')
-var Funnel = require('broccoli-funnel')
 var mergeTrees = require('broccoli-merge-trees')
+var sieve = require('broccoli-file-sieve')
 
-var findTechFiles = require('./findTechFiles')
-var matchDepsWithFiles = require('./matchDepsWithFiles')
+var makeDepsGlobs = require('./makeDepsGlobs')
 
 /**
  * Prepares tree for tech builder.
@@ -12,27 +10,23 @@ var matchDepsWithFiles = require('./matchDepsWithFiles')
  * Levels dirs names are incremented from '0'.
  * @param levels {Array.<string>} Levels paths.
  * @param deps {Deps} Bem deps object.
- * @param suffix {string} Suffix of tech files.
+ * @param suffixes {array.<string>} Suffixes of tech files.
  */
-var LevelsReader = function(levels, deps, suffix) {
-	if (!(this instanceof LevelsReader)) return new LevelsReader(levels, deps, suffix)
+var LevelsReader = function(levels, deps, suffixes) {
+	if (!(this instanceof LevelsReader)) return new LevelsReader(levels, deps, suffixes)
 	this.levels = levels
 	this.deps = deps
-	this.suffix = suffix
+	this.suffixes = suffixes
 }
 
 LevelsReader.prototype.read = function(readTree) {
-	var self = this
 	var levelsTrees = _.map(this.levels, function(level, index) {
-		var files = findTechFiles(level, self.suffix)
-		var matchedFiles = _.flatten(_.values(matchDepsWithFiles(self.deps, files)))
-		return new Funnel(level, {
-			destDir: index + '',
-			files: _.map(matchedFiles, function(file) {
-				return path.relative(level, file)
-			})
+		var globs = makeDepsGlobs(this.deps, this.suffixes, true)
+		return sieve(level, {
+			files: globs,
+			destDir: index + ''
 		})
-	})
+	}, this)
 	var mergedTree = mergeTrees(levelsTrees)
 	return readTree(mergedTree)
 }

@@ -11,8 +11,7 @@
   "dependencies": {
     "broccoli": "^0.13.2",
     "broccoli-autoprefixer": "^2.0.0",
-    "broccoli-concat": "0.0.12",
-    "broccoli-funnel": "^0.1.6",
+    "broccoli-file-sieve": "^0.1.0",
     "broccoli-glob-caching-writer": "^0.1.0",
     "broccoli-merge-trees": "^0.2.1",
     "broccoli-sass": "^0.3.3",
@@ -21,6 +20,7 @@
     "fast-sourcemap-concat": "^0.2.0",
     "glob": "^4.0.5",
     "minimatch": "^1.0.0",
+    "node-sass": "^2.0.0-beta",
     "q": "^1.1.2",
     "quick-temp": "^0.1.2",
     "uglify-js": "^2.4.15",

@@ -2,21 +2,24 @@ var _ = require('underscore')
 var path = require('path')
 var mergeTrees = require('broccoli-merge-trees')
 
-var TechBuilder = require('../techBuilder')
+var makeDepsGlobs = require('../makeDepsGlobs')
 var Concat = require('../plugins/concat')
 
 var SUFFIXES = ['css', 'ie8.css', 'ie9.css']
 
 function Tree(levelsTree, deps, options) {
-	options.suffixes = SUFFIXES
-	TechBuilder.apply(this, arguments)
+	this.levelsTree = levelsTree
+	this.deps = deps
+	this.options = options
 }
 
-Tree.prototype = Object.create(TechBuilder.prototype)
 Tree.prototype.description = 'Css tech'
 
-Tree.prototype.build = function(readTree, depsGlobs) {
-	if (!this.cachedTree) this.cachedTree = this.createTree(depsGlobs)
+Tree.prototype.read = function(readTree) {
+	if (!this.cachedTree) {
+		var depsGlobs = makeDepsGlobs(this.deps, SUFFIXES)
+		this.cachedTree = this.createTree(depsGlobs)
+	}
 	return readTree(this.cachedTree)
 }
 
@@ -36,7 +39,7 @@ Tree.prototype.createConcat = function(globs, moduleName, suffix) {
 		files: globs,
 		dest: dest
 	})
-	//css minify?
+	//TODO css minify
 	return result
 }
 

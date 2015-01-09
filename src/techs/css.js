@@ -40,7 +40,7 @@ Tree.prototype.createConcat = function(globs, moduleName, suffix) {
 		dest: dest,
 		mapCommentType: 'block'
 	})
-	//TODO css minify
+	// TODO css minify
 	return result
 }
 

@@ -9,7 +9,7 @@ var glob = require('glob')
  */
 var SINGLE_EXTENSION_PATTERN = '*([^.])*(.[0-9])'
 
-//TODO change this function with multiple-glob or dirmatch
+// TODO change this function with multiple-glob or dirmatch
 var globArraySync = function(patterns, options) {
 	if (options === undefined) options = {}
 	var result = []
@@ -34,10 +34,12 @@ function findFiles(dir, pattern) {
 	var includePatterns = [path.join(dir, '**', pattern)]
 	var patterns = [].concat(includePatterns, excludePatterns)
 	return globArraySync(patterns)
-	//TODO glob must have nodir: true, dir may have name 'some.js'
+	// TODO glob must have nodir: true, dir may have name 'some.js'.
 }
 
-/** Finds files with tech suffix in level dir. */
+/**
+ * Finds files with tech suffix in level dir.
+ */
 var findTechFiles = function(dir, suffix) {
 	var pattern = SINGLE_EXTENSION_PATTERN + '.' + suffix
 	return findFiles(dir, pattern)

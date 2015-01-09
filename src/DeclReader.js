@@ -9,7 +9,9 @@ var DeclReader = function(levels) {
 	this.files = this.findDeclFiles()
 }
 
-/** Finds declarations files on levels. */
+/**
+ * Finds declarations files on levels.
+ */
 DeclReader.prototype.findDeclFiles = function() {
 	var result = []
 
@@ -37,7 +39,9 @@ DeclReader.prototype.groupDeclFiles = function(files) {
 	return map
 }
 
-/** Traverses declaration and all its dependencies recursively. */
+/**
+ * Traverses declaration and all its dependencies recursively.
+ */
 DeclReader.prototype.traverse = function(name, callback, traversed) {
 	if (traversed === undefined) traversed = []
 
@@ -64,7 +68,9 @@ DeclReader.prototype.traverse = function(name, callback, traversed) {
 	traversed.push(name)
 }
 
-/** Reads and parses decl's files. */
+/**
+ * Reads and parses decl's files.
+ */
 DeclReader.prototype.readDeclFromFiles = function(name) {
 	var decl = {items: [], blocks: []}
 	var files = this.files[name]

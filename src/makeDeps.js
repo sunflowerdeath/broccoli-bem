@@ -25,7 +25,7 @@ function makeDeclDeps(declName, decls, deferred, deferredModules) {
 	for (var i in decl.blocks) {
 		var block = decl.blocks[i]
 
-		//deferred blocks are included only to deferred modules
+		// Deferred blocks are included only to deferred modules
 		if (!deferred && _.contains(deferredModules, block.name)) continue
 		deps = deps.concat(makeDeclDeps(block.name, decls, deferred, deferredModules))
 		deps = deps.concat(makeItemsDeps(block.items, decls, deferred, deferredModules))
@@ -65,7 +65,7 @@ function makeDeps(declName, reader) {
 		var moduleName = modules[i]
 		var deferred = deferredModules.indexOf(moduleName) != -1
 		var moduleDeps = makeDeclDeps(moduleName, decls, deferred, deferredModules)
-		//deps of module are its deps without deps of prev modules
+		// Deps of module are its deps without deps of prev modules.
 		deps[moduleName] = _.difference(moduleDeps, _.flatten(_.values(deps)))
 	}
 

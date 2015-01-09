@@ -14,7 +14,6 @@ var DEFAULT_OPTIONS = {
 	]
 }
 
-//TODO rename functions: it moves techs deps from next to previous
 function loadTechs(techModules) {
 	var techs = _.extend.apply(_, techModules)
 
@@ -23,7 +22,7 @@ function loadTechs(techModules) {
 		tech.prevTechs = tech.prevTechs || []
 	}
 
-	//moves nextTechs to prevTechs
+	// Moves nextTechs to prevTechs
 	for (var techName in techs) {
 		var tech = techs[techName]
 		var nextTechs = tech.nextTechs || []
@@ -39,7 +38,9 @@ function loadTechs(techModules) {
 	return techs
 }
 
-//it 1) takes list of techs 2) runs them 3) merges results and returns it
+/**
+ * Takes list of techs, runs them, merges results and returns them.
+ */
 function buildTechs(options, techs, deps) {
 	var usedTechs = _.pick(techs, options.techs)
 	var results = runTechs(options.techs, options, usedTechs, deps)
@@ -49,7 +50,9 @@ function buildTechs(options, techs, deps) {
 	return mergeTrees(withoutPreprocessors, {overwrite: true})
 }
 
-//it runs techs and their dependent techs recursively
+/**
+ * Runs techs and their dependent techs recursively.
+ */
 function runTechs(techsList, options, techs, deps, results) {
 	if (results === undefined) results = {}
 
@@ -114,7 +117,7 @@ Builder.prototype.read = function(readTree) {
 		var tech = this.techs[i]
 		if (tech.changeDeps) deps = tech.changeDeps(deps, reader)
 	}
-	//TODO cache and invalidate cache when deps changed
+	// TODO cache and invalidate cache when deps changed
 	var tree = buildTechs(this.options, this.techs, deps)
 	return readTree(tree)
 }

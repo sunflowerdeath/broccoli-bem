@@ -20,7 +20,7 @@ Tree.prototype.read = function(readTree) {
 	var mixGlobs = makeDepsGlobs(this.deps, ['mix.scss'], true)
 	var filesGlobs = makeDepsGlobs(this.deps, _.without(SUFFIXES, 'mix.scss'), true)
 
-	//move mixins to the top level
+	// Move mixins to the top level.
 	var mixTree = sieve(this.levelsTree, {
 		files: mixGlobs,
 		changeFilePath: path.basename

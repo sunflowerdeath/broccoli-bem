@@ -12,6 +12,7 @@ var makeSuffixGlobs = function(deps, suffix) {
 
 /**
  * Makes glob patterns for all possible dependencies files.
+ *
  * @param deps {object} Bem deps.
  * @param suffixes {array.<string>} List of tech suffixes.
  * @return Object with array of globs for each module.

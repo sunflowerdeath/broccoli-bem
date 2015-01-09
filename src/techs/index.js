@@ -1,6 +1,6 @@
 module.exports = {
 	css: require('./css'),
-	//scss: require('./scss'),
+	scss: require('./scss'),
 	img: require('./img'),
 	js: require('./js'),
 	autoprefixer: require('./autoprefixer'),

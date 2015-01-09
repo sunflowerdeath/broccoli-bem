@@ -37,11 +37,14 @@ Tree.prototype.createConcat = function(globs, moduleName, suffix) {
 	var dest = path.join('styles', moduleName + '.' + suffix)
 	var result = Concat(this.levelsTree, {
 		files: globs,
-		dest: dest
+		dest: dest,
+		mapCommentType: 'block'
 	})
 	//TODO css minify
 	return result
 }
+
+Tree.prototype.cleanup = function() {}
 
 module.exports = {
 	suffixes: SUFFIXES,

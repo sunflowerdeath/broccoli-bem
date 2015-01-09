@@ -23,6 +23,9 @@ describe('scss', function() {
 		if (builder) builder.cleanup()
 	})
 
+	var RESULT = '.index {\n' +
+  	'  color: #F00; }'
+
 	it('builds scss to css', function() {
 		var options = _.defaults(OPTIONS, {
 			levels: [path.join(DIR, 'blocks')]
@@ -32,13 +35,12 @@ describe('scss', function() {
 		builder = new broccoli.Builder(bem)
 		return builder.build().then(function(result) {
 			var dir = result.directory
-			var index = fs.readFileSync(path.join(dir, 'styles/index.css'), 'utf8')
-			var indexRef = fs.readFileSync(path.join(DIR, 'indexRef.css'), 'utf8')
-			//assert.equal(index, indexRef)
+			var css = fs.readFileSync(path.join(dir, 'styles/index.css'), 'utf8')
+			assert.equal(css.slice(0, RESULT.length), RESULT)
 		})
 	})
 
-	it('mixins are available in scss files', function() {
+	it('mixins are available in scss files from top level', function() {
 		var options = _.defaults(OPTIONS, {
 			levels: [path.join(DIR, 'mixins')]
 		})
@@ -47,11 +49,8 @@ describe('scss', function() {
 		builder = new broccoli.Builder(bem)
 		return builder.build().then(function(result) {
 			var dir = result.directory
-
-			var index = fs.readFileSync(path.join(dir, 'styles/index.css'), 'utf8')
-			var indexRef = fs.readFileSync(path.join(DIR, 'mixinsRef.css'), 'utf8')
-			console.log(index)
-			//assert.equal(index, indexRef)
+			var css = fs.readFileSync(path.join(dir, 'styles/index.css'), 'utf8')
+			assert.equal(css.slice(0, RESULT.length), RESULT)
 		})
 	})
 })

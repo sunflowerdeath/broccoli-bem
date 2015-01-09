@@ -8,7 +8,8 @@ Tree.prototype.description = 'Autoprefixer tech'
 
 Tree.prototype.read = function(readTree) {
 	return readTree(autoprefixer(this.inputTree, {
-		browsers: ['ie >= 8', 'ios >= 7', 'last 2 versions', 'Firefox ESR', 'Opera 12.1']
+		browsers: ['ie >= 8', 'ios >= 7', 'last 2 versions', 'Firefox ESR', 'Opera 12.1'],
+		map: {inline: false}
 	}))
 }
 

@@ -23,6 +23,7 @@ Concat.prototype.updateCache = function(srcDir, destDir, files) {
 		outputFile: path.join(destDir, this.options.dest),
 		mapFile: path.join(destDir, this.options.mapDest),
 		mapURL: this.options.mapUrl,
+		mapCommentType: this.options.mapCommentType,
 		baseDir: srcDir
 	})
 	if (this.options.header) sourcemap.addSpace(this.options.header)

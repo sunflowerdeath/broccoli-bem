@@ -18,7 +18,7 @@ Tree.prototype.description = 'Js tech'
 
 Tree.prototype.read = function(readTree, depsGlobs) {
 	if (!this.cachedTree) {
-		var depsGlobs = makeDepsGlobs(this.deps)
+		var depsGlobs = makeDepsGlobs(this.deps, SUFFIXES)
 		this.cachedTree = this.createTree(depsGlobs)
 	}
 	return readTree(this.cachedTree)

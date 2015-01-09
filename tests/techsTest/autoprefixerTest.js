@@ -24,7 +24,6 @@ describe('autoprefixer', function() {
 		return builder.build().then(function(result) {
 			var dir = result.directory
 			var index = fs.readFileSync(path.join(dir, 'styles/index.css'), 'utf8')
-
 			assert(index.indexOf('webkit') !== -1)
 		})
 	})

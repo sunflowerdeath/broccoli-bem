@@ -1,6 +1,5 @@
 var _ = require('underscore')
 var mergeTrees = require('broccoli-merge-trees')
-var deepEqual = require('deep-equal')
 
 var makeDeps = require('./makeDeps')
 var DeclReader = require('./DeclReader')
@@ -118,7 +117,7 @@ Builder.prototype.read = function(readTree) {
 		var tech = this.techs[i]
 		if (tech.changeDeps) deps = tech.changeDeps(deps, reader)
 	}
-	if (!deepEqual(this.cachedDeps, deps, {strict: true})) {
+	if (!_.isEqual(this.cachedDeps, deps)) {
 		this.cachedDeps = deps
 		this.cachedTree = buildTechs(this.options, this.techs, deps)
 	}

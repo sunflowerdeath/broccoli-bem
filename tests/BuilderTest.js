@@ -56,10 +56,10 @@ describe('Builder', function() {
 	})
 
 	it('builds tech', function() {
-		var suffix = 'js'
+		var SUFFIXES = ['js']
 
 		var fakeTech = {
-			suffixes: [suffix],
+			suffixes: SUFFIXES,
 			Tree: FakeTechTree
 		}
 
@@ -86,7 +86,7 @@ describe('Builder', function() {
 			var args = FakeLevelsReader.lastCall.args
 			assert.deepEqual(args[0], config.levels)
 			assert.equal(args[1], fakeDeps)
-			assert.equal(args[2], suffix)
+			assert.deepEqual(args[2], SUFFIXES)
 
 			//check that tech's Tree is created
 			var args = FakeTechTree.lastCall.args
@@ -170,6 +170,20 @@ describe('Builder', function() {
 	xit('doesnt output preprocessors results', function() {})
 	
 	xit('outputs postprocessor result instead of builder result', function() {})
+
+	xit('caches techs trees when deps are same', function() {
+		//TODO
+		//create builder with 1 tech
+		//make makeDeps return something
+		//build
+		//assert tech builder's and leveltree's constructors called
+		//make makeDeps return equal but not same object
+		//build again
+		//assert constructors to be not called again
+		//make makeDeps return different deps
+		//build again
+		//assert constructors to be called again
+	})
 })
 
 describe('Builder init', function() {

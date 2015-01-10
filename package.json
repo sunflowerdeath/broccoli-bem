@@ -17,6 +17,7 @@
     "broccoli-sass": "^0.3.3",
     "broccoli-webfont": "0.0.0",
     "broccoli-writer": "^0.1.1",
+    "deep-equal": "^0.2.1",
     "fast-sourcemap-concat": "^0.2.0",
     "glob": "^4.0.5",
     "minimatch": "^1.0.0",

@@ -3,10 +3,9 @@ var path = require('path')
 var mergeTrees = require('broccoli-merge-trees')
 
 var makeDepsGlobs = require('../makeDepsGlobs')
-var Concat = require('../plugins/concat')
-var Uglify = require('../plugins/uglify')
+var SourcemapConcat = require('../plugins/sourcemapConcatPlugin')
 
-var SUFFIXES = ['js', 'ie8.js', 'ie9.js']
+var SUFFIXES = ['css', 'ie8.css', 'ie9.css']
 
 function Tree(levelsTree, deps, options) {
 	this.levelsTree = levelsTree
@@ -14,9 +13,9 @@ function Tree(levelsTree, deps, options) {
 	this.options = options
 }
 
-Tree.prototype.description = 'Js tech'
+Tree.prototype.description = 'Css tech'
 
-Tree.prototype.read = function(readTree, depsGlobs) {
+Tree.prototype.read = function(readTree) {
 	if (!this.cachedTree) {
 		var depsGlobs = makeDepsGlobs(this.deps, SUFFIXES)
 		this.cachedTree = this.createTree(depsGlobs)
@@ -35,23 +34,17 @@ Tree.prototype.createTree = function(depsGlobs) {
 }
 
 Tree.prototype.createConcat = function(globs, moduleName, suffix) {
-	var dest = path.join('scripts', moduleName + '.' + suffix)
-	var result
-	if (this.options.debug) {
-		result = Concat(this.levelsTree, {
-			files: globs,
-			dest: dest,
-			header: 'var DEBUG = true;',
-			separator: ';\n'
-		})
-	} else {
-		result = Uglify(this.levelsTree, {
-			files: globs,
-			dest: dest
-		})
-	}
+	var dest = path.join('styles', moduleName + '.' + suffix)
+	var result = SourcemapConcat(this.levelsTree, {
+		files: globs,
+		dest: dest,
+		mapCommentType: 'block'
+	})
+	// TODO css minify
 	return result
 }
+
+Tree.prototype.cleanup = function() {}
 
 module.exports = {
 	suffixes: SUFFIXES,

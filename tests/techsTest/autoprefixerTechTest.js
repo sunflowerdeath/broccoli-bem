@@ -6,7 +6,7 @@ var broccoli = require('broccoli')
 var Builder = require('../../src/Builder')
 
 describe('autoprefixer', function() {
-	var DIR = path.join(__dirname, 'autoprefixerTest')
+	var DIR = path.join(__dirname, 'autoprefixerTechTest')
 	var builder
 
 	afterEach(function() {

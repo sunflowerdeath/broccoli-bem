@@ -3,7 +3,7 @@ var _ = require('underscore')
 var sieve = require('broccoli-file-sieve')
 var mergeTrees = require('broccoli-merge-trees')
 
-var scss = require('../plugins/scss')
+var scss = require('../plugins/scssPlugin')
 var makeDepsGlobs = require('../makeDepsGlobs')
 
 var SUFFIXES = ['scss', 'ie8.scss', 'ie9.scss', 'mix.scss']

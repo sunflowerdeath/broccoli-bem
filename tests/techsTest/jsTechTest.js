@@ -7,15 +7,12 @@ var _ = require('underscore')
 var Builder = require('../../src/Builder')
 
 describe('js', function() {
-	var DIR = path.join(__dirname, 'jsTest')
+	var DIR = path.join(__dirname, 'jsTechTest')
 
 	var OPTIONS = {
 		blockName: 'index',
 		techs: ['js'],
-		levels: [path.join(DIR, 'blocks')],
-		techModules: [
-			{js: require('../../src/techs/js')}
-		]
+		levels: [path.join(DIR, 'blocks')]
 	}
 	
 	var builder

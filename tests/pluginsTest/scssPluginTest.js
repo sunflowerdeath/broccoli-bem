@@ -3,7 +3,7 @@ var fs = require('fs')
 var path = require('path')
 var broccoli = require('broccoli')
 
-var scss = require('../../src/plugins/scss')
+var scss = require('../../src/plugins/scssPlugin')
 
 describe('scss plugin', function() {
 	var DIR = path.join(__dirname, 'scssPluginTest')

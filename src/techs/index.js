@@ -1,8 +1,8 @@
 module.exports = {
-	css: require('./css'),
-	scss: require('./scss'),
-	img: require('./img'),
-	js: require('./js'),
-	autoprefixer: require('./autoprefixer'),
+	css: require('./cssTech'),
+	scss: require('./scssTech'),
+	img: require('./imgTech'),
+	js: require('./jsTech'),
+	autoprefixer: require('./autoprefixerTech'),
 	//webfont: require('./webfont')
 }

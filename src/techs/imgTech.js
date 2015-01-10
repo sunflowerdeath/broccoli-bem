@@ -1,3 +1,4 @@
+var path = require('path')
 var sieve = require('broccoli-file-sieve')
 
 var makeDepsGlobs = require('../makeDepsGlobs')
@@ -20,7 +21,7 @@ Tree.prototype.read = function(readTree) {
 		var globs = makeDepsGlobs(_this.deps, SUFFIXES, true)
 		return readTree(sieve(levelsDir, {
 			files: globs,
-			changeFilePath: function() { return '' }
+			changeFilePath: path.basename
 		}))
 	})
 }

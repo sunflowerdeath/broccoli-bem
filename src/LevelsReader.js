@@ -8,7 +8,6 @@ var makeDepsGlobs = require('./makeDepsGlobs')
  * Prepares tree for tech builder.
  * Copies files of specific tech matching to deps from levels dirs to new tree.
  * Levels dirs names are incremented from '0'.
- *
  * @param levels {Array.<string>} Levels paths.
  * @param deps {Deps} Bem deps object.
  * @param suffixes {array.<string>} Suffixes of tech files.

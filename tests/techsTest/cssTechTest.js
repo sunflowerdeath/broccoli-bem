@@ -5,8 +5,8 @@ var broccoli = require('broccoli')
 
 var Builder = require('../../src/Builder')
 
-describe('css', function() {
-	var DIR = path.join(__dirname, 'cssTest')
+describe('css tech', function() {
+	var DIR = path.join(__dirname, 'cssTechTest')
 	var builder
 
 	afterEach(function() {

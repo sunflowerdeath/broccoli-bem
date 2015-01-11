@@ -17,7 +17,7 @@ Filesystem organization
 
 BEM-projects require special filesystem organization to allow automating building process.
 
-broccoli-bem uses following rules:
+broccoli-bem uses following conventions:
 
 ###Levels
 

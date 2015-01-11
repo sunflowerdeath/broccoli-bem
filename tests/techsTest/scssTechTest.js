@@ -10,7 +10,8 @@ describe('scss tech', function() {
 	var DIR = path.join(__dirname, 'scssTechTest')
 	var OPTIONS = {
 		blockName: 'index',
-		techs: ['css', 'scss']
+		techs: ['css', 'scss'],
+		debug: true
 	}
 
 	var builder

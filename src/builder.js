@@ -14,15 +14,12 @@ var DEFAULT_OPTIONS = {
 	]
 }
 
-function loadTechs(techModules) {
-	var techs = _.extend.apply(_, techModules)
-
+function moveNextTechsToPrev(techs) {
 	for (var techName in techs) {
 		var tech = techs[techName]
 		tech.prevTechs = tech.prevTechs || []
 	}
 
-	// Moves nextTechs to prevTechs
 	for (var techName in techs) {
 		var tech = techs[techName]
 		var nextTechs = tech.nextTechs || []
@@ -38,7 +35,7 @@ function loadTechs(techModules) {
 	return techs
 }
 
-/** Takes list of techs, runs them, merges results and returns them. */
+/** Takes list of techs, runs them, merges results and returns it. */
 function buildTechs(options, techs, deps) {
 	var usedTechs = _.pick(techs, options.techs)
 	var results = runTechs(options.techs, options, usedTechs, deps)
@@ -85,21 +82,20 @@ function runTechs(techsList, options, techs, deps, results) {
 function Builder(options) {
 	if (!(this instanceof Builder)) return new Builder(options)
 	this.options = _.extend({}, DEFAULT_OPTIONS, options)
-	this.techs = loadTechs(this.options.techModules)
+	this.techs = _.extend.apply(_, this.options.techModules)
 
 	if (!this.options.blockName) {
 		throw new Error('[broccoli-bem] Option "blockName" is required')
 	}
-
 	if (!Array.isArray(this.options.levels)) {
 		throw new Error('[broccoli-bem] Option "levels" must be an array')
 	}
-
 	var unknown = _.difference(this.options.techs, _.keys(this.techs))
 	if (unknown.length) {
 		throw new Error('[broccoli-bem] Unknown techs: ' + unknown.join())
 	}
 
+	this.techs = moveNextTechsToPrev(this.techs)
 	for (var i in this.techs) {
 		var tech = this.techs[i]
 		if (tech.changeOptions) this.options = tech.changeOptions(options)

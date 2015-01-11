@@ -9,13 +9,12 @@
   "author": "sunflowerdeath",
   "license": "public domain",
   "dependencies": {
-    "broccoli": "^0.13.2",
     "broccoli-autoprefixer": "^2.0.0",
     "broccoli-file-sieve": "^0.1.0",
     "broccoli-glob-caching-writer": "^0.2.0",
     "broccoli-merge-trees": "^0.2.1",
     "broccoli-sass": "^0.3.3",
-    "broccoli-webfont": "0.0.2",
+    "broccoli-webfont": "^0.1.0",
     "broccoli-writer": "^0.1.1",
     "fast-sourcemap-concat": "^0.2.0",
     "glob": "^4.0.5",
@@ -27,6 +26,7 @@
     "underscore": "^1.7.0"
   },
   "devDependencies": {
+    "broccoli": "^0.13.2",
     "mocha": "^2.0.1",
     "proxyquire": "^1.0.1",
     "sinon": "^1.11.1"

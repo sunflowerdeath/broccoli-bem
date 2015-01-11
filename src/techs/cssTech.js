@@ -1,6 +1,7 @@
 var _ = require('underscore')
 var path = require('path')
 var mergeTrees = require('broccoli-merge-trees')
+var cleanCss = require('broccoli-clean-css')
 
 var makeDepsGlobs = require('../makeDepsGlobs')
 var SourcemapConcat = require('../plugins/sourcemapConcatPlugin')
@@ -30,7 +31,9 @@ Tree.prototype.createTree = function(depsGlobs) {
 			return _this.createConcat(moduleGlobs, moduleName, suffix)
 		})
 	}))
-	return mergeTrees(trees)
+	var result = mergeTrees(trees)
+	if (!this.options.debug) result = cleanCss(result)
+	return result
 }
 
 Tree.prototype.createConcat = function(globs, moduleName, suffix) {
@@ -40,7 +43,6 @@ Tree.prototype.createConcat = function(globs, moduleName, suffix) {
 		dest: dest,
 		mapCommentType: 'block'
 	})
-	// TODO css minify
 	return result
 }
 

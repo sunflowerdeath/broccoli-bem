@@ -1,6 +1,7 @@
 var assert = require('assert')
 var fs = require('fs')
 var path = require('path')
+var _ = require('underscore')
 var broccoli = require('broccoli')
 
 var Builder = require('../../src/builder')
@@ -20,13 +21,15 @@ describe('css tech', function() {
 		return true
 	}
 
+	var OPTIONS = {
+		blockName: 'index',
+		techs: ['css'],
+		levels: [path.join(DIR, 'blocks')],
+		debug: true
+	}
+
 	it('builds css to concatenated files', function() {
-		var level = path.join(DIR, 'blocks')
-		var bem = Builder({
-			blockName: 'index',
-			techs: ['css'],
-			levels: [level]
-		})
+		var bem = Builder(OPTIONS)
 
 		builder = new broccoli.Builder(bem)
 		return builder.build().then(function(result) {
@@ -39,5 +42,27 @@ describe('css tech', function() {
 			assert(checkOccurence(ie8, ['indexie8']), 'browser specific code is built separately')
 			assert(checkOccurence(module, ['module']), 'modules are built separately')
 		})
+	})
+
+	it('minify when not debug', function() {
+		var debugTree = Builder(OPTIONS)
+		var minifyTree = Builder(_.extend({}, OPTIONS, {debug: false}))
+		
+		var debugSize, minifiedSize
+
+		builder = new broccoli.Builder(debugTree)
+		return builder.build()
+			.then(function(result) {
+				var css = fs.readFileSync(path.join(result.directory, 'styles/index.css'), 'utf-8')
+				debugSize = css.length
+				builder.cleanup()
+				builder = new broccoli.Builder(minifyTree)
+				return builder.build()
+			})
+			.then(function(result) {
+				var css = fs.readFileSync(path.join(result.directory, 'styles/index.css'), 'utf-8')
+				minifiedSize = css.length
+				assert(debugSize > minifiedSize)
+			})
 	})
 })

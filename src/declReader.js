@@ -9,9 +9,7 @@ var DeclReader = function(levels) {
 	this.files = this.findDeclFiles()
 }
 
-/**
- * Finds declarations files on levels.
- */
+/** Finds declarations files on levels. */
 DeclReader.prototype.findDeclFiles = function() {
 	var result = []
 
@@ -39,9 +37,7 @@ DeclReader.prototype.groupDeclFiles = function(files) {
 	return map
 }
 
-/**
- * Traverses declaration and all its dependencies recursively.
- */
+/** Traverses declaration and all its dependencies recursively. */
 DeclReader.prototype.traverse = function(name, callback, traversed) {
 	if (traversed === undefined) traversed = []
 
@@ -68,9 +64,7 @@ DeclReader.prototype.traverse = function(name, callback, traversed) {
 	traversed.push(name)
 }
 
-/**
- * Reads and parses decl's files.
- */
+/** Reads and parses declarations files. */
 DeclReader.prototype.readDeclFromFiles = function(name) {
 	var decl = {items: [], blocks: []}
 	var files = this.files[name]
@@ -82,7 +76,7 @@ DeclReader.prototype.readDeclFromFiles = function(name) {
 		if (!fs.existsSync(declPath)) continue;
 		var file = fs.readFileSync(declPath, 'utf-8')
 		file = file.replace(/^\uFEFF/, '') //utf BOM
-		
+
 		try {
 			var json = JSON.parse(file)
 			this.mergeDecls(decl, json)

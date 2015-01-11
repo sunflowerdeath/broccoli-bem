@@ -15,7 +15,7 @@ var Concat = function(inputTree, options) {
 }
 
 Concat.prototype = Object.create(CachingWriter.prototype)
-Concat.prototype.description = 'Concat'
+Concat.prototype.description = 'SourcemapConcat'
 
 Concat.prototype.updateCache = function(srcDir, destDir, files) {
 	if (!files.length) return

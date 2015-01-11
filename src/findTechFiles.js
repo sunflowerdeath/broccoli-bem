@@ -37,9 +37,7 @@ function findFiles(dir, pattern) {
 	// TODO glob must have nodir: true, dir may have name 'some.js'.
 }
 
-/**
- * Finds files with tech suffix in level dir.
- */
+/** Finds files with tech suffix in level dir. */
 var findTechFiles = function(dir, suffix) {
 	var pattern = SINGLE_EXTENSION_PATTERN + '.' + suffix
 	return findFiles(dir, pattern)

@@ -3,10 +3,10 @@ var path = require('path')
 var fs = require('fs')
 var broccoli = require('broccoli')
 
-var LevelsReader = require('../src/LevelsReader')
+var LevelsReader = require('../src/levelsReader')
 
 describe('LevelsReader', function() {
-	var DIR = path.join(__dirname, 'LevelsReaderTest')
+	var DIR = path.join(__dirname, 'levelsReaderTest')
 	var LEVELS = [
 		path.join(DIR, 'level1'),
 		path.join(DIR, 'level2')

@@ -53,6 +53,8 @@ Tree.prototype.createConcat = function(globs, moduleName, suffix) {
 	return result
 }
 
+Tree.prototype.cleanup = function() {}
+
 module.exports = {
 	suffixes: SUFFIXES,
 	Tree: Tree

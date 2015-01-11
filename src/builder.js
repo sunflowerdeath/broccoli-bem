@@ -2,12 +2,12 @@ var _ = require('underscore')
 var mergeTrees = require('broccoli-merge-trees')
 
 var makeDeps = require('./makeDeps')
-var DeclReader = require('./DeclReader')
-var LevelsReader = require('./LevelsReader')
+var DeclReader = require('./declReader')
+var LevelsReader = require('./levelsReader')
 
 var DEFAULT_OPTIONS = {
 	deployPath: '/deploy',
-	techs: ['js', 'scss', 'css'],
+	techs: ['js', 'scss', 'css', 'autoprefixer'],
 	levels: ['blocks'],
 	techModules: [
 		require('./techs')
@@ -38,9 +38,7 @@ function loadTechs(techModules) {
 	return techs
 }
 
-/**
- * Takes list of techs, runs them, merges results and returns them.
- */
+/** Takes list of techs, runs them, merges results and returns them. */
 function buildTechs(options, techs, deps) {
 	var usedTechs = _.pick(techs, options.techs)
 	var results = runTechs(options.techs, options, usedTechs, deps)
@@ -50,9 +48,7 @@ function buildTechs(options, techs, deps) {
 	return mergeTrees(withoutPreprocessors, {overwrite: true})
 }
 
-/**
- * Runs techs and their dependent techs recursively.
- */
+/** Runs techs and their dependent techs recursively. */
 function runTechs(techsList, options, techs, deps, results) {
 	if (results === undefined) results = {}
 

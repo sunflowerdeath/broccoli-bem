@@ -20,7 +20,7 @@ Tree.prototype.read = function(readTree) {
 	var mixGlobs = makeDepsGlobs(this.deps, ['mix.scss'], true)
 	var filesGlobs = makeDepsGlobs(this.deps, _.without(SUFFIXES, 'mix.scss'), true)
 
-	// Move mixins to the top level.
+	// Move mixins to the top level
 	var mixTree = sieve(this.levelsTree, {
 		files: mixGlobs,
 		changeFilePath: path.basename
@@ -40,5 +40,6 @@ Tree.prototype.cleanup = function() {}
 module.exports = {
 	Tree: Tree,
 	suffixes: SUFFIXES,
-	nextTechs: ['css']
+	nextTechs: ['css'],
+	preprocessor: true
 }

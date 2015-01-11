@@ -3,18 +3,19 @@ var path = require('path')
 var _ = require('underscore')
 var sinon = require('sinon')
 
-var DeclReader = require('../src/DeclReader')
+var DeclReader = require('../src/declReader')
 
 describe('DeclReader', function() {
 
-	var ONE_LEVEL = [path.join(__dirname, 'DeclReaderTest/oneLevel')]
-	var ERROR = [path.join(__dirname, 'DeclReaderTest/error')]
+	var DIR = path.join(__dirname, 'declReaderTest')
+	var ONE_LEVEL = [path.join(DIR, 'oneLevel')]
+	var ERROR = [path.join(DIR, 'error')]
 	var MULTIPLE_LEVELS = [
-		path.join(__dirname, 'DeclReaderTest/multipleLevels/level1'),
-		path.join(__dirname, 'DeclReaderTest/multipleLevels/level2')
+		path.join(DIR, 'multipleLevels/level1'),
+		path.join(DIR, 'multipleLevels/level2')
 	]
-	var TRAVERSE_ONCE = [path.join(__dirname, 'DeclReaderTest/traverseOnce')]
-	var TRAVERSE_RECURSIVELY = [path.join(__dirname, 'DeclReaderTest/traverseRecursively')]
+	var TRAVERSE_ONCE = [path.join(DIR, 'traverseOnce')]
+	var TRAVERSE_RECURSIVELY = [path.join(DIR, 'traverseRecursively')]
 
 	it('finds decl files', function() {
 		var reader = new DeclReader(ONE_LEVEL)

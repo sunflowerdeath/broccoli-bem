@@ -5,40 +5,49 @@ var path = require('path')
 var fs = require('fs')
 var proxyquire = require('proxyquire').noPreserveCache()
 
-//fake dependencies
+var DIR = path.join(__dirname, 'builderTest')
+
+// Fake objects
+
 var FakeDeclReader = sinon.spy(function() {})
+
 
 var fakeDeps = {}
 var fakeMakeDeps = sinon.spy(function() {
-	//returns empty object to compare with (Techs & LevelsReader are fake and dont use deps)
+	// Returns empty object to compare with.
+	// Tech trees & LevelsReader are also fake, so they don't need deps.
 	return fakeDeps
 })
 
+
+// Returns directory with one file with specified suffix (index.js, index.css)
 var FakeLevelsReader = function(deps, config, suffixes) {
 	this.suffixes = suffixes
 }
 FakeLevelsReader.prototype.read = sinon.spy(function() {
-	//returns existing directory
-	return path.join(__dirname, 'BuilderTest', this.suffixes[0])
+	return path.join(DIR, this.suffixes[0])
 })
 FakeLevelsReader.prototype.cleanup = function() {}
 FakeLevelsReader = sinon.spy(FakeLevelsReader)
 
+
+// Returns input levelsTree
 var FakeTechTree = sinon.spy(function(levelsTree) {
 	this.levelsTree = levelsTree
 })
 FakeTechTree.prototype.read = sinon.spy(function(readTree) {
-	//returns input levelsTree
 	return readTree(this.levelsTree)
 })
 FakeTechTree.prototype.cleanup = function() {}
 FakeTechTree = sinon.spy(FakeTechTree)
 
-var Builder = proxyquire('../src/Builder', {
-	'./DeclReader': FakeDeclReader,
+
+var Builder = proxyquire('../src/builder', {
+	'./declReader': FakeDeclReader,
 	'./makeDeps': fakeMakeDeps,
-	'./LevelsReader': FakeLevelsReader
+	'./levelsReader': FakeLevelsReader
 })
+
 
 describe('Builder', function() {
 	var builder
@@ -46,7 +55,7 @@ describe('Builder', function() {
 	afterEach(function() {
 		if (builder) builder.cleanup()
 		
-		//reset spies
+		// Reset spies
 		FakeDeclReader.reset()
 		fakeMakeDeps.reset()
 		FakeLevelsReader.reset()
@@ -55,51 +64,51 @@ describe('Builder', function() {
 		FakeTechTree.prototype.read.reset()
 	})
 
-	it('builds tech', function() {
-		var SUFFIXES = ['js']
 
+	it('builds tech', function() {
 		var fakeTech = {
-			suffixes: SUFFIXES,
+			suffixes: ['js'],
 			Tree: FakeTechTree
 		}
 
-		var config = {
-			isConfig: true,
+		var options = {
+			isOptions: true,
 			levels: ['level'],
 			blockName: 'index',
 			techs: ['tech'],
 			techModules: [{tech: fakeTech}]
 		}
 		
-		var bem = Builder(config)
+		var bem = Builder(options)
 		
 		builder = new broccoli.Builder(bem)
 		return builder.build().then(function(result) {
-			//check that dependencies are created correctly
-			assert(FakeDeclReader.calledWith(config.levels))
+			// Dependencies are created with DeclReader
+			assert(FakeDeclReader.calledWith(options.levels))
 
 			var args = fakeMakeDeps.lastCall.args
-			assert.equal(args[0], config.blockName)
+			assert.equal(args[0], options.blockName)
 			assert(args[1] instanceof FakeDeclReader)
 
-			//check that LevelsReader for tech is created
+			// LevelsReader for tech is created
 			var args = FakeLevelsReader.lastCall.args
-			assert.deepEqual(args[0], config.levels)
+			assert.deepEqual(args[0], options.levels)
 			assert.equal(args[1], fakeDeps)
-			assert.deepEqual(args[2], SUFFIXES)
+			assert.deepEqual(args[2], fakeTech.suffixes)
 
-			//check that tech's Tree is created
+			// Tech's Tree is created
 			var args = FakeTechTree.lastCall.args
 			assert.equal(args[1], fakeDeps)
-			assert(args[2].isConfig)
+			assert(args[2].isOptions)
 
-			//check that tech runs and returns result (copied js files)
+			// Tech runs and returns result (copied js files)
 			assert(FakeTechTree.prototype.read.called)
 			assert.deepEqual(fs.readdirSync(result.directory), ['index.js'])
 		})
 	})
-	
-	it('changes deps with techs changeDeps methods', function() {
+
+
+	it('changes deps with techs "changeDeps" methods', function() {
 		var fakeChangedDeps = {}
 		
 		var fakeTech = {
@@ -110,29 +119,30 @@ describe('Builder', function() {
 			})
 		}
 
-		var config = {
+		var options = {
 			blockName: 'index',
 			techs: ['tech'],
 			techModules: [{tech: fakeTech}]
 		}
 		
-		var bem = Builder(config)
+		var bem = Builder(options)
 		
 		builder = new broccoli.Builder(bem)
 		return builder.build().then(function() {
-			//changeDeps is called
+			// ChangeDeps is called
 			var args = fakeTech.changeDeps.lastCall.args
 			assert.equal(args[0], fakeDeps)
 			assert(args[1] instanceof FakeDeclReader)
 			
-			//tech gets changed deps
+			// Tech gets changed deps
 			var args = FakeTechTree.lastCall.args
 			assert.equal(args[1], fakeChangedDeps)
 		})
 	})
 
-	it('runs techs with leveltrees merged with dependent techs results', function() {
-		//js tech depends on css tech
+
+	it('merges leveltrees with dependent techs results', function() {
+		// js tech depends on css tech
 		var jsTech = {
 			suffixes: ['js'],
 			Tree: sinon.spy(FakeTechTree),
@@ -143,7 +153,7 @@ describe('Builder', function() {
 			Tree: sinon.spy(FakeTechTree)
 		}
 
-		var config = {
+		var options = {
 			blockName: 'index',
 			techs: ['js', 'css'],
 			techModules: [{
@@ -152,12 +162,12 @@ describe('Builder', function() {
 			}]
 		}
 
-		var bem = Builder(config)
+		var bem = Builder(options)
 
 		builder = new broccoli.Builder(bem)
 		return builder.build().then(function() {
 			var readTree = FakeTechTree.prototype.read.lastCall.args[0]
-			//levelsTree for js tech must have results of css tech merged with js files
+			// levelsTree for js tech must have results of css tech merged with js files
 			var jsLevelTree = jsTech.Tree.lastCall.args[0]
 			return readTree(jsLevelTree).then(function(jsLevelsDir) {
 				assert.deepEqual(fs.readdirSync(jsLevelsDir), ['index.css', 'index.js'])
@@ -165,29 +175,95 @@ describe('Builder', function() {
 		})
 	})
 
+
 	xit('outputs merged results of techs', function() {})
 
-	xit('doesnt output preprocessors results', function() {})
-	
-	xit('outputs postprocessor result instead of builder result', function() {})
+
+	it('does not output preprocessors results', function() {
+		var jsTech = {
+			Tree: FakeTechTree,
+			suffixes: 'js',
+			preprocessor: true
+		}
+
+		var options = {
+			blockName: 'index',
+			techs: ['js'],
+			techModules: [{
+				js: jsTech
+			}]
+		}
+
+		var bem = Builder(options)
+
+		builder = new broccoli.Builder(bem)
+		return builder.build().then(function(result) {
+			var result = fs.readdirSync(result.directory)
+			assert.equal(result.length, 0)
+		})
+	})
+
+
+	it('outputs postprocessor result instead of processed techs\'s result', function() {
+		// Css tech have postprocessor.
+		// Postprocessor's result is file 'index.post'.
+		// Css tech's result is file 'index.css'.
+		// Build result should have only postprocessor's result.
+
+		var PostprocessorTree = function() {}
+		PostprocessorTree.prototype.read = function() {
+			return path.join(DIR, 'postprocessor')
+		}
+		PostprocessorTree.prototype.cleanup = function() {}
+
+		var postprocessorTech = {
+			Tree: PostprocessorTree,
+			postprocessor: true,
+			prevTechs: ['css']
+		}
+
+		var cssTech = {
+			Tree: FakeTechTree,
+			suffixes: 'css'
+		}
+
+		var options = {
+			blockName: 'index',
+			techs: ['css', 'postprocessor'],
+			techModules: [{
+				css: cssTech,
+				postprocessor: postprocessorTech
+			}]
+		}
+
+		var bem = Builder(options)
+
+		builder = new broccoli.Builder(bem)
+		return builder.build().then(function(result) {
+			var result = fs.readdirSync(result.directory)
+			assert.deepEqual(result, ['index.post'])
+		})
+	})
+
 
 	xit('caches techs trees when deps are same', function() {
-		//TODO
-		//create builder with 1 tech
-		//make makeDeps return something
-		//build
-		//assert tech builder's and leveltree's constructors called
-		//make makeDeps return equal but not same object
-		//build again
-		//assert constructors to be not called again
-		//make makeDeps return different deps
-		//build again
-		//assert constructors to be called again
+		// TODO
+		// create builder with 1 tech
+		// make makeDeps return something
+		// build
+		// assert tech builder's and leveltree's constructors called
+		// make makeDeps return equal but not same object
+		// build again
+		// assert constructors to be not called again
+		// make makeDeps return different deps
+		// build again
+		// assert constructors to be called again
 	})
 })
 
+
 describe('Builder init', function() {
-	it('throws if blockName is not specified', function() {
+	it('throws if "blockName" is not specified', function() {
 		var thrown
 		try {
 			Builder()
@@ -210,7 +286,7 @@ describe('Builder init', function() {
 		assert(thrown)
 	})
 
-	it('changes options with techs changeOptions method', function() {
+	it('changes options with techs "changeOptions" method', function() {
 		var tech = {
 			changeOptions: sinon.spy(function(options) {
 				options.changed = 'changed'

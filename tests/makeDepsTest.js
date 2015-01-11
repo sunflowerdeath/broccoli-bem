@@ -1,8 +1,7 @@
 var assert = require('assert')
-var path = require('path')
 var _ = require('underscore')
 
-var DeclReader = require('../src/DeclReader')
+var DeclReader = require('../src/declReader')
 var makeDeps = require('../src/makeDeps')
 
 describe('makeDeps', function() {
@@ -45,7 +44,7 @@ describe('makeDeps', function() {
 			blocks: [],
 			items: ['index__elem']
 		},
-		index__elem: {
+		'index__elem': {
 			blocks: [{name: 'block'}],
 			items: []
 		}

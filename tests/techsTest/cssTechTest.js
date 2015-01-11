@@ -3,7 +3,7 @@ var fs = require('fs')
 var path = require('path')
 var broccoli = require('broccoli')
 
-var Builder = require('../../src/Builder')
+var Builder = require('../../src/builder')
 
 describe('css tech', function() {
 	var DIR = path.join(__dirname, 'cssTechTest')

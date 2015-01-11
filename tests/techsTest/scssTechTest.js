@@ -4,9 +4,9 @@ var path = require('path')
 var broccoli = require('broccoli')
 var _ = require('underscore')
 
-var Builder = require('../../src/Builder')
+var Builder = require('../../src/builder')
 
-describe('scss', function() {
+describe('scss tech', function() {
 	var DIR = path.join(__dirname, 'scssTechTest')
 	var OPTIONS = {
 		blockName: 'index',

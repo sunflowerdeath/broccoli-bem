@@ -4,9 +4,9 @@ var path = require('path')
 var broccoli = require('broccoli')
 var _ = require('underscore')
 
-var Builder = require('../../src/Builder')
+var Builder = require('../../src/builder')
 
-describe('js', function() {
+describe('js tech', function() {
 	var DIR = path.join(__dirname, 'jsTechTest')
 
 	var OPTIONS = {

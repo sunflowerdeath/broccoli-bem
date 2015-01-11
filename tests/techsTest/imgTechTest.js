@@ -26,7 +26,7 @@ describe('img tech', function() {
 		builder = new broccoli.Builder(bem)
 		return builder.build().then(function(result) {
 			var dir = result.directory
-			var copied = fs.readdirSync(dir, 'images')
+			var copied = fs.readdirSync(path.join(dir, 'images'))
 			assert.deepEqual(copied, IMAGES)
 		})
 	})

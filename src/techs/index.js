@@ -4,5 +4,5 @@ module.exports = {
 	img: require('./imgTech'),
 	js: require('./jsTech'),
 	autoprefixer: require('./autoprefixerTech'),
-	//webfont: require('./webfont')
+	webfont: require('./webfontTech')
 }

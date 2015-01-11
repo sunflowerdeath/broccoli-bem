@@ -21,7 +21,9 @@ Tree.prototype.read = function(readTree) {
 		var globs = makeDepsGlobs(_this.deps, SUFFIXES, true)
 		return readTree(sieve(levelsDir, {
 			files: globs,
-			changeFilePath: path.basename
+			changeFilePath: function(file) {
+				return path.join('images', path.basename(file))
+			}
 		}))
 	})
 }

@@ -17,6 +17,11 @@ var Tree = function(levelsTree, deps, options) {
 Tree.prototype.description = 'Scss tech'
 
 Tree.prototype.read = function(readTree) {
+	if (!this.cachedTree) this.cachedTree = this.createTree()
+	return readTree(this.cachedTree)
+}
+
+Tree.prototype.createTree = function() {
 	var mixGlobs = makeDepsGlobs(this.deps, ['mix.scss'], true)
 	var filesGlobs = makeDepsGlobs(this.deps, _.without(SUFFIXES, 'mix.scss'), true)
 
@@ -27,12 +32,12 @@ Tree.prototype.read = function(readTree) {
 	})
 	var newTree = mergeTrees([this.levelsTree, mixTree])
 
-	return readTree(scss(newTree, {
+	return scss(newTree, {
 		files: filesGlobs,
 		sassOptions: {
 			imagePath: '../images'
 		}
-	}))
+	})
 }
 
 Tree.prototype.cleanup = function() {}

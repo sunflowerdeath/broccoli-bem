@@ -16,14 +16,12 @@ function Tree(levelsTree, deps, options) {
 Tree.prototype.description = 'Webfont tech'
 
 Tree.prototype.read = function(readTree) {
-	if (!this.cachedTree) {
-		var depsGlobs = makeDepsGlobs(this.deps, SUFFIXES)
-		this.cachedTree = this.makeTree(depsGlobs)
-	}
+	if (!this.cachedTree) this.cachedTree = this.makeTree()
 	return readTree(this.cachedTree)
 }
 
-Tree.prototype.makeTree = function(depsGlobs) {
+Tree.prototype.makeTree = function() {
+	var depsGlobs = makeDepsGlobs(this.deps, SUFFIXES)
 	var trees = _.map(depsGlobs['icon.svg'], function(moduleGlobs, moduleName) {
 		return webfont(this.levelsTree, {
 			files: moduleGlobs,
@@ -39,6 +37,8 @@ Tree.prototype.makeTree = function(depsGlobs) {
 	}, this)
 	return mergeTrees(trees)
 }
+
+Tree.prototype.cleanup = function() {}
 
 module.exports = {
 	preprocessor: true,

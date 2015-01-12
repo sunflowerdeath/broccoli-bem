@@ -17,15 +17,13 @@ function Tree(levelsTree, deps, options) {
 Tree.prototype.description = 'Js tech'
 
 Tree.prototype.read = function(readTree, depsGlobs) {
-	if (!this.cachedTree) {
-		var depsGlobs = makeDepsGlobs(this.deps, SUFFIXES)
-		this.cachedTree = this.createTree(depsGlobs)
-	}
+	if (!this.cachedTree) this.cachedTree = this.createTree(depsGlobs)
 	return readTree(this.cachedTree)
 }
 
-Tree.prototype.createTree = function(depsGlobs) {
+Tree.prototype.createTree = function() {
 	var _this = this
+	var depsGlobs = makeDepsGlobs(this.deps, SUFFIXES)
 	var trees = _.flatten(_.map(depsGlobs, function(suffixGlobs, suffix) {
 		return _.map(suffixGlobs, function(moduleGlobs, moduleName) {
 			return _this.createConcat(moduleGlobs, moduleName, suffix)

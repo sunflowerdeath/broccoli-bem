@@ -7,7 +7,7 @@ var LevelsReader = require('./levelsReader')
 
 var DEFAULT_OPTIONS = {
 	deployPath: '/deploy',
-	techs: ['js', 'scss', 'css', 'autoprefixer'],
+	techs: ['js', 'scss', 'css', 'autoprefixer', 'webfont', 'img'],
 	levels: ['blocks'],
 	techModules: [
 		require('./techs')

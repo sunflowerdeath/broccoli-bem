@@ -23,7 +23,7 @@ Concat.prototype.description = 'SourcemapConcat'
 
 Concat.prototype.updateCache = function(srcDir, destDir, files) {
 	if (!files.length) return
-	if (this.options.enabled) this.concatWithMaps(srcDir, destDir, files)
+	if (this.options.enabled) return this.concatWithMaps(srcDir, destDir, files)
 	else this.simpleConcat(srcDir, destDir, files)
 }
 

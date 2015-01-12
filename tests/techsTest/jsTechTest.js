@@ -47,6 +47,7 @@ describe('js tech', function() {
 		return builder.build().then(function(result) {
 			var dir = result.directory
 			var index = fs.readFileSync(path.join(dir, 'scripts/index.js'), 'utf8')
+			assert(checkOccurence(index, ['block', 'block__elem', 'index', 'index__elem']))
 			assert(checkOccurence(index, ['sourceMappingURL=index.js.map']), 'script uses map')
 			assert(fs.existsSync(path.join(dir, 'scripts/index.js.map')), 'map exists')
 		})

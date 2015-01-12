@@ -5,6 +5,7 @@ var cleanCss = require('broccoli-clean-css')
 
 var makeDepsGlobs = require('../makeDepsGlobs')
 var SourcemapConcat = require('../plugins/sourcemapConcatPlugin')
+var Concat = require('../plugins/concatPlugin')
 
 var SUFFIXES = ['css', 'ie8.css', 'ie9.css']
 
@@ -36,12 +37,15 @@ Tree.prototype.createTree = function(depsGlobs) {
 
 Tree.prototype.createConcat = function(globs, moduleName, suffix) {
 	var dest = path.join('styles', moduleName + '.' + suffix)
-	var result = SourcemapConcat(this.levelsTree, {
-		files: globs,
-		dest: dest,
-		mapCommentType: 'block'
-	})
-	return result
+	if (this.options.debug) {
+		return SourcemapConcat(this.levelsTree, {
+			files: globs,
+			dest: dest,
+			mapCommentType: 'block'
+		})
+	} else {
+		return Concat(this.levelsTree, {files: globs, dest: dest})
+	}
 }
 
 Tree.prototype.cleanup = function() {}

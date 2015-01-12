@@ -41,6 +41,7 @@ describe('css tech', function() {
 			assert(checkOccurence(index, ['block', 'block__elem', 'index', 'index__elem']))
 			assert(checkOccurence(ie8, ['indexie8']), 'browser specific code is built separately')
 			assert(checkOccurence(module, ['module']), 'modules are built separately')
+			assert(checkOccurence(index, 'sourceMappingURL'))
 		})
 	})
 
@@ -63,6 +64,7 @@ describe('css tech', function() {
 				var css = fs.readFileSync(path.join(result.directory, 'styles/index.css'), 'utf-8')
 				minifiedSize = css.length
 				assert(debugSize > minifiedSize)
+				assert(!checkOccurence(css, 'sourceMappingURL'))
 			})
 	})
 })

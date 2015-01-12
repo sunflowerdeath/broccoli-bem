@@ -7,9 +7,7 @@ var CachingWriter = require('broccoli-glob-caching-writer')
 
 var Uglify = function(inputTrees, options) {
 	if (!(this instanceof Uglify)) return new Uglify(inputTrees, options)
-	if (options.dest === undefined) {
-		throw new Error('[broccoli-uglify] Option "dest" is required')
-	}
+	if (options.dest === undefined) throw new Error('Option "dest" is required')
   CachingWriter.apply(this, arguments)
 }
 

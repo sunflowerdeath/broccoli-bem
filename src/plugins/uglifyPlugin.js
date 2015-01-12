@@ -8,7 +8,7 @@ var CachingWriter = require('broccoli-glob-caching-writer')
 var Uglify = function(inputTrees, options) {
 	if (!(this instanceof Uglify)) return new Uglify(inputTrees, options)
 	if (options.dest === undefined) throw new Error('Option "dest" is required')
-  CachingWriter.apply(this, arguments)
+	CachingWriter.apply(this, arguments)
 }
 
 Uglify.prototype = Object.create(CachingWriter.prototype)

@@ -28,7 +28,7 @@ describe('css tech', function() {
 		debug: true
 	}
 
-	it('builds css to concatenated files', function() {
+	it('builds css to concatenated files with maps when debug', function() {
 		var bem = Builder(OPTIONS)
 
 		builder = new broccoli.Builder(bem)
@@ -41,11 +41,11 @@ describe('css tech', function() {
 			assert(checkOccurence(index, ['block', 'block__elem', 'index', 'index__elem']))
 			assert(checkOccurence(ie8, ['indexie8']), 'browser specific code is built separately')
 			assert(checkOccurence(module, ['module']), 'modules are built separately')
-			assert(checkOccurence(index, 'sourceMappingURL'))
+			assert(checkOccurence(index, 'sourceMappingURL=index.map.css'))
 		})
 	})
 
-	it('minify when not debug', function() {
+	it('minify css when not debug', function() {
 		var debugTree = Builder(OPTIONS)
 		var minifyTree = Builder(_.extend({}, OPTIONS, {debug: false}))
 		

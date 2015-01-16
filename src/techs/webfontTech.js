@@ -24,12 +24,12 @@ Tree.prototype.read = function(readTree) {
 Tree.prototype.makeTree = function() {
 	var depsGlobs = makeDepsGlobs(this.deps, SUFFIXES)['icon.svg']
 
-	var trees = _.map(depsGlobs, function(moduleGlobs, moduleName) {
+	var trees = _.map(depsGlobs, function(bundleGlobs, bundleName) {
 		return webfont(this.levelsTree, {
-			files: moduleGlobs,
-			fontName: moduleName,
+			files: bundleGlobs,
+			fontName: bundleName,
 			dest: 'fonts',
-			cssDest: path.join('fonts', moduleName + '.webfont.scss'),
+			cssDest: path.join('fonts', bundleName + '.webfont.scss'),
 			cssTemplate: webfont.templates.scss,
 			cssFontsPath: '../images',
 			rename: function(file) {

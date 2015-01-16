@@ -36,11 +36,11 @@ describe('css tech', function() {
 			var dir = result.directory
 			var index = fs.readFileSync(path.join(dir, 'styles/index.css'), 'utf8')
 			var ie8 = fs.readFileSync(path.join(dir, 'styles/index.ie8.css'), 'utf8')
-			var module = fs.readFileSync(path.join(dir, 'styles/module.css'), 'utf8')
+			var bundle = fs.readFileSync(path.join(dir, 'styles/bundle.css'), 'utf8')
 
 			assert(checkOccurence(index, ['block', 'block__elem', 'index', 'index__elem']))
 			assert(checkOccurence(ie8, ['indexie8']), 'browser specific code is built separately')
-			assert(checkOccurence(module, ['module']), 'modules are built separately')
+			assert(checkOccurence(bundle, ['bundle']), 'bundles are built separately')
 			assert(checkOccurence(index, 'sourceMappingURL=index.map.css'))
 		})
 	})

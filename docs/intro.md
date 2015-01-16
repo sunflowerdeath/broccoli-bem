@@ -1,8 +1,6 @@
-Intro
-=====
+#Intro
 
-BEM
----
+##BEM
 
 BEM — Block Element Modifier is a methodology, that helps you to achieve reusable components and code sharing in the front-end.
 
@@ -12,8 +10,7 @@ http://getbem.com/introduction/
 Or here:
 https://bem.info/
 
-Filesystem organization
------------------------
+##Filesystem organization
 
 BEM-projects require special filesystem organization to allow automating building process.
 
@@ -69,18 +66,18 @@ Example:
 }
 ```
 
-###Modules
+###Bundles
 
-Declaration can specify that block should be built as separate module.
-Modules are useful for separating common part of multiple pages or
+Declaration can specify that block should be built as separate bundle.
+Bundles are useful for separating common part of multiple pages or
 for deferring loading of some code.
 
-There are two types of modules &mdash; static and deferred.
-Static modules are always loaded to page, deferred modules are loaded only when needed.
+There are two types of bundles &mdash; static and deferred.
+Static bundles are always loaded to page, deferred bundles are loaded only when needed.
 By default all blocks are built to single static module.
 
-If block is built as separate module, it and its dependencies will no longer be included into next
-modules.
+If block is built as separate bundle, it and its dependencies will no longer be included
+into next bundles.
 
-To build block as module you need to add to declaration `"module": true`.<br>
-For deferred module &mdash; `"module": true, "deferred": true`.
+To build block as bundle you need to add to declaration `"bundle": true`.<br>
+For deferred bundle &mdash; `"bundle": true, "deferred": true`.

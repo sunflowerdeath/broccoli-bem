@@ -106,10 +106,10 @@ DeclReader.prototype.mergeDecls = function(target, source) {
 		}
 	}
 
-	target.module = target.module || source.module
+	target.bundle = target.bundle || source.bundle
 	target.deferred = target.deferred || source.deferred
 
-	var handled = ['items', 'blocks', 'module', 'deferred']
+	var handled = ['items', 'blocks', 'bundle', 'deferred']
 	_.each(source, function(val, key) {
 		if (!_.contains(handled, key)) target[key] = val
 	})

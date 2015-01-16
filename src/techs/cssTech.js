@@ -25,8 +25,8 @@ Tree.prototype.createTree = function(depsGlobs) {
 	var _this = this
 	var depsGlobs = makeDepsGlobs(this.deps, SUFFIXES)
 	var trees = _.flatten(_.map(depsGlobs, function(suffixGlobs, suffix) {
-		return _.map(suffixGlobs, function(moduleGlobs, moduleName) {
-			return _this.createConcat(moduleGlobs, moduleName, suffix)
+		return _.map(suffixGlobs, function(bundleGlobs, bundleName) {
+			return _this.createConcat(bundleGlobs, bundleName, suffix)
 		})
 	}))
 	var result = mergeTrees(trees)
@@ -34,8 +34,8 @@ Tree.prototype.createTree = function(depsGlobs) {
 	return result
 }
 
-Tree.prototype.createConcat = function(globs, moduleName, suffix) {
-	var dest = path.join('styles', moduleName + '.' + suffix)
+Tree.prototype.createConcat = function(globs, bundleName, suffix) {
+	var dest = path.join('styles', bundleName + '.' + suffix)
 	return SourcemapConcat(this.levelsTree, {
 		enabled: !!this.options.debug,
 		files: globs,

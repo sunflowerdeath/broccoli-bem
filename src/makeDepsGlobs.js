@@ -2,8 +2,8 @@ var _ = require('underscore')
 
 var makeSuffixGlobs = function(deps, suffix) {
 	var globs = {}
-	_.each(deps, function(moduleDeps, moduleName) { 
-		globs[moduleName] = _.map(moduleDeps, function(dep) {
+	_.each(deps, function(bundleDeps, bundleName) { 
+		globs[bundleName] = _.map(bundleDeps, function(dep) {
 			return '**/' + dep + '.' + suffix
 		})
 	})

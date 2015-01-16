@@ -120,6 +120,7 @@ describe('Builder', function() {
 		}
 
 		var options = {
+			isOptions: true,
 			blockName: 'index',
 			techs: ['tech'],
 			techModules: [{tech: fakeTech}]
@@ -132,7 +133,8 @@ describe('Builder', function() {
 			// ChangeDeps is called
 			var args = fakeTech.changeDeps.lastCall.args
 			assert.equal(args[0], fakeDeps)
-			assert(args[1] instanceof FakeDeclReader)
+			assert(args[1].isOptions)
+			assert(args[2] instanceof FakeDeclReader)
 			
 			// Tech gets changed deps
 			var args = FakeTechTree.lastCall.args

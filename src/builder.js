@@ -107,7 +107,7 @@ Builder.prototype.read = function(readTree) {
 	var deps = makeDeps(this.options.blockName, reader)
 	for (var i in this.techs) {
 		var tech = this.techs[i]
-		if (tech.changeDeps) deps = tech.changeDeps(deps, reader)
+		if (tech.changeDeps) deps = tech.changeDeps(deps, this.options, reader)
 	}
 	if (!_.isEqual(this.cachedDeps, deps)) {
 		this.cachedDeps = deps

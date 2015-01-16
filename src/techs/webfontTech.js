@@ -4,6 +4,7 @@ var mergeTrees = require('broccoli-merge-trees')
 var webfont = require('broccoli-webfont')
 
 var makeDepsGlobs = require('../makeDepsGlobs')
+var sourcemapConcat = require('../plugins/sourcemapConcatPlugin')
 
 var SUFFIXES = ['icon.svg']
 
@@ -21,21 +22,29 @@ Tree.prototype.read = function(readTree) {
 }
 
 Tree.prototype.makeTree = function() {
-	var depsGlobs = makeDepsGlobs(this.deps, SUFFIXES)
-	var trees = _.map(depsGlobs['icon.svg'], function(moduleGlobs, moduleName) {
+	var depsGlobs = makeDepsGlobs(this.deps, SUFFIXES)['icon.svg']
+
+	var trees = _.map(depsGlobs, function(moduleGlobs, moduleName) {
 		return webfont(this.levelsTree, {
 			files: moduleGlobs,
 			fontName: moduleName,
 			dest: 'fonts',
-			cssDest: path.join('fonts', moduleName + '.mix.scss'),
-			cssTemplateType: 'scss',
+			cssDest: path.join('fonts', moduleName + '.webfont.scss'),
+			cssTemplate: webfont.templates.scss,
 			cssFontsPath: '../images',
 			rename: function(file) {
 				return path.basename(file, '.icon.svg')
 			}
 		})
 	}, this)
-	return mergeTrees(trees)
+
+	var mergedTree = mergeTrees(trees)
+	var mix = sourcemapConcat(mergedTree, {
+		files: ['fonts/*.webfont.scss'],
+		dest: 'fonts/webfont.mix.scss',
+		enabled: false
+	})
+	return mergeTrees([mergedTree, mix])
 }
 
 Tree.prototype.cleanup = function() {}
@@ -44,5 +53,9 @@ module.exports = {
 	preprocessor: true,
 	nextTechs: ['scss', 'img'],
 	suffixes: SUFFIXES,
-	Tree: Tree
+	Tree: Tree,
+	changeDeps: function(deps, options) {
+		deps[options.blockName].push('webfont')
+		return deps
+	}
 }

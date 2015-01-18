@@ -1,33 +1,33 @@
 var _ = require('underscore')
 
-var makeSuffixGlobs = function(deps, suffix) {
+var makeSuffixDepsGlobs = function(deps, suffix, flatten) {
 	var globs = {}
 	_.each(deps, function(bundleDeps, bundleName) { 
 		globs[bundleName] = _.map(bundleDeps, function(dep) {
 			return '**/' + dep + '.' + suffix
 		})
 	})
+	if (flatten) globs = _.flatten(_.values(globs))
 	return globs
 }
 
 /**
  * Makes glob patterns for all possible dependencies files.
- *
  * @param deps {object} Bem deps.
- * @param suffixes {array.<string>} List of tech suffixes.
+ * @param suffixes {string|array.<string>} List of tech suffixes.
  * @return Object with array of globs for each module.
+ * 	When suffixes is array, it returns object with results for every suffix.
  */
 var makeDepsGlobs = function(deps, suffixes, flatten) {
-	if (!Array.isArray(suffixes)) throw new Error('argument "suffixes" must be an array')
+	if (!Array.isArray(suffixes)) {
+		return makeSuffixDepsGlobs(deps, suffixes, flatten)
+	}
+
 	var globs = {}
 	_.each(suffixes, function(suffix) {
-		globs[suffix] = makeSuffixGlobs(deps, suffix) 
+		globs[suffix] = makeSuffixDepsGlobs(deps, suffix, flatten) 
 	})
-	if (flatten) {
-		globs = _.flatten(_.map(globs, function(suffixGlobs) {
-			return _.values(suffixGlobs)
-		}))
-	}
+	if (flatten) globs = _.flatten(_.values(globs))
 	return globs
 }
 

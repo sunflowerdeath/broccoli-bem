@@ -42,7 +42,7 @@ Type: `array.<object>`
 
 Default: `[TODO]`
 
-Modules with technologies builders.
+Array of modules with technology builders.
 
 Example:
 ```js
@@ -55,14 +55,14 @@ techsModules: [
 Technology builders
 -------------------
 
-Technology builder is an object with following properties:
+Technology builder is an object with the following properties:
 
 ###Tree
 
 Type: `function(levelsTree, deps, options)`
 
 Broccoli plugin that builds technology files.
-It takes following arguments:
+It takes the following arguments:
 
 **levelsTree** &mdash; Input tree with tech files from levels.
 
@@ -70,10 +70,13 @@ It takes following arguments:
 
 **options** &mdash; Builder's options.
 
-To match tech files with dependencies you can use function 
-`findDepsFiles(levelsDir, deps, suffix)`.
-It returns object with lists of files for each module.
-Filepaths are relative to levelsDir.
+To find files of dependencies you can use function `makeDepsGlobs(deps, suffix, flatten)`.
+<br>
+It returns an object with lists of globs for each bundle.
+Globs are relative to the levelsDir.
+<br>
+Then you can pass this globs to some plugin supporting globs, or find files with e.g.
+[dirmatch](https://github.com/sunflowerdeath/dirmatch).
 
 Example:
 ```js
@@ -84,11 +87,10 @@ var MyTech = function() {
 }
 
 MyTech.prototype.read = function(readTree) {
-  var self = this
+  var depsGlobs = makeDepsGlobs(this.deps, 'suffix')
   return readTree(this.levelsTree).then(function(levelsDir) {
-    var depsFiles = findDepsFiles(levelsDir, self.deps, 'mytech')
-    _.map(depsFiles, function(files, moduleName) {
-      //here code that builds files of module 'moduleName'.
+    _.map(depsGlobs, function(files, bundleName) {
+      // Here code that builds files of bundle 'bundleName'.
     })
   })
 }
@@ -145,3 +147,9 @@ LevelsTrees of next technologies will contain result of building current technol
 Type: `function(options)`
 
 Function that can change builder's options.
+
+###changeDeps
+
+Type: `function(deps, options)`
+
+Function that can change deps.

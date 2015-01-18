@@ -74,7 +74,7 @@ for deferring loading of some code.
 
 There are two types of bundles &mdash; static and deferred.
 Static bundles are always loaded to page, deferred bundles are loaded only when needed.
-By default all blocks are built to single static module.
+By default all blocks are built to single static bundle.
 
 If block is built as separate bundle, it and its dependencies will no longer be included
 into next bundles.

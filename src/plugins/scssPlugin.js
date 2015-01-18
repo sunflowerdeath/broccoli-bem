@@ -7,6 +7,7 @@ var Filter = require('broccoli-glob-filter')
 var Scss = function(inputTree, options) {
 	if (!(this instanceof Scss)) return new Scss(inputTree, options)
 	if (!options) options = {}
+	if (options.files === undefined) options.files = ['**/*.scss']
 	if (options.targetExtension === undefined) options.targetExtension = 'css'
   Filter.apply(this, arguments)
 }

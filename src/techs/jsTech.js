@@ -3,8 +3,8 @@ var path = require('path')
 var mergeTrees = require('broccoli-merge-trees')
 
 var makeDepsGlobs = require('../makeDepsGlobs')
-var SourcemapConcat = require('../plugins/sourcemapConcatPlugin')
-var Uglify = require('../plugins/uglifyPlugin')
+var sourcemapConcat = require('../plugins/sourcemapConcatPlugin')
+var uglify = require('broccoli-uglify-js')
 
 var SUFFIXES = ['js', 'ie8.js', 'ie9.js']
 
@@ -29,26 +29,24 @@ Tree.prototype.createTree = function() {
 			return _this.createConcat(bundleGlobs, bundleName, suffix)
 		})
 	}))
-	return mergeTrees(trees)
+	var result = mergeTrees(trees)
+	if (!this.options.debug) result = uglify(result)
+	return result
 }
 
 Tree.prototype.createConcat = function(globs, bundleName, suffix) {
 	var dest = path.join('scripts', bundleName + '.' + suffix)
-	var result
-	if (this.options.debug) {
-		result = SourcemapConcat(this.levelsTree, {
-			files: globs,
-			dest: dest,
-			header: 'var DEBUG = true;',
-			separator: ';\n'
-		})
-	} else {
-		result = Uglify(this.levelsTree, {
-			files: globs,
-			dest: dest
-		})
+	var concatOptions = {
+		files: globs,
+		dest: dest,
+		separator: ';\n',
+		mapEnabled: false
 	}
-	return result
+	if (this.options.debug) {
+		concatOptions.header = 'var DEBUG = true;'
+		concatOptions.mapEnabled = true
+	}
+	return sourcemapConcat(this.levelsTree, concatOptions)
 }
 
 Tree.prototype.cleanup = function() {}

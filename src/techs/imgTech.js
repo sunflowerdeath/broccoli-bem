@@ -16,16 +16,13 @@ function Tree(levelsTree, deps) {
 Tree.prototype.description = 'Img tech'
 
 Tree.prototype.read = function(readTree) {
-	var _this = this
-	return readTree(this.levelsTree).then(function(levelsDir) {
-		var globs = makeDepsGlobs(_this.deps, SUFFIXES, true)
-		return readTree(sieve(levelsDir, {
-			files: globs,
-			changeFilePath: function(file) {
-				return path.join('images', path.basename(file))
-			}
-		}))
-	})
+	var globs = makeDepsGlobs(this.deps, SUFFIXES, true)
+	return readTree(sieve(this.levelsTree, {
+		files: globs,
+		changeFilePath: function(file) {
+			return path.join('images', path.basename(file))
+		}
+	}))
 }
 
 Tree.prototype.cleanup = function() {}

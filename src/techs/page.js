@@ -1,12 +1,12 @@
 var path = require('path')
 var _ = require('underscore')
+var dirmatch = require('dirmatch')
 var sieve = require('broccoli-file-sieve')
-var mergeTrees = require('broccoli-merge-trees')
+var renderHandlebars = require('broccoli-render-handlebars')
 
-var scss = require('../plugins/scssPlugin')
 var makeDepsGlobs = require('../makeDepsGlobs')
 
-var SUFFIXES = ['scss', 'ie8.scss', 'ie9.scss', 'mix.scss']
+var SUFFIXES = ['hbs', 'part.hbs']
 
 var Tree = function(levelsTree, deps, options) {
 	this.levelsTree = levelsTree
@@ -14,20 +14,39 @@ var Tree = function(levelsTree, deps, options) {
 	this.options = options 
 }
 
-Tree.prototype.description = 'Scss tech'
+Tree.prototype.description = 'Page tech'
 
 Tree.prototype.read = function(readTree) {
-	//partials may have .part.hbs ext
-	//and separated to 'partialspath'?
-	
-	//takes file moduleName and {techOptions?.handlebars.pages} .hbs
-	//get/find templates || make template globs
+	return readTree(this.levelsTree).then(function(srcDir) {
+		var renderTree = renderHandlebars(this.levelsTree, {
+			files: ['**/' + this.options.blockName + '.hbs'],
+			partials: makeDepsGlobs(this.deps, 'part.hbs', true),
+			makePartialName: function(file) { return path.basename(file, '.hbs') },
+			context: this.makeRenderCtx(srcDir)
+		})
+		var deployTree = sieve(renderTree, {
+			files: ['**/*.html'],
+			destDir: 'html',
+			changeFilePath: path.basename,
+		})
+		return readTree(deployTree)
+	}.bind(this))
+}
 
-	//make files object
-	//take all css and js files and separate by extensions
-
-	//pass object to template
-	//or to handlebars plugin
+Tree.prototype.makeRenderCtx = function(srcDir) {
+	var deployPath = this.options.deployPath
+	var suffixes = ['js', 'ie8.js', 'ie9.js', 'css', 'ie8.css', 'ie9.css']
+	var modules = _.keys(this.deps)
+	var files = {}
+	_.each(suffixes, function(suffix) {
+		var globs = _.map(modules, function(module) {
+			return path.join('**', module + '.' + suffix)
+		})
+		files[suffix] = _.map(dirmatch(srcDir, globs), function(file) {
+			return path.join(deployPath, file) //TODO hashes
+		})
+	})
+	return {files: files}
 }
 
 Tree.prototype.cleanup = function() {}

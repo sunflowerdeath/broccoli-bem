@@ -5,5 +5,6 @@ module.exports = {
 	js: require('./jsTech'),
 	autoprefixer: require('./autoprefixerTech'),
 	webfont: require('./webfontTech'),
-	page: require('./page')
+	page: require('./pageTech'),
+	es6: require('./es6Tech')
 }

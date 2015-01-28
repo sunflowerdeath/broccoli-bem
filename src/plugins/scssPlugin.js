@@ -25,7 +25,7 @@ Scss.prototype.processFileContent = function(content, relPath, srcDir) {
 		},
 		error: function(error) {
 			var prettyError = new Error(
-				'[scss plugin] can\'t build scss\n' +
+				'node-sass can\'t build scss\n' +
 				'Message: ' + error.message + '\n' +
 				'File: ' + path.relative(srcDir, error.file) + '\n' +
 				'Line: ' + error.line + '\n' +

@@ -16,8 +16,8 @@ function Tree(levelsTree, deps, options) {
 
 Tree.prototype.description = 'Js tech'
 
-Tree.prototype.read = function(readTree, depsGlobs) {
-	if (!this.cachedTree) this.cachedTree = this.createTree(depsGlobs)
+Tree.prototype.read = function(readTree) {
+	if (!this.cachedTree) this.cachedTree = this.createTree()
 	return readTree(this.cachedTree)
 }
 

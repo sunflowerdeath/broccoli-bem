@@ -21,7 +21,7 @@ Tree.prototype.read = function(readTree) {
 	return readTree(this.cachedTree)
 }
 
-Tree.prototype.createTree = function(depsGlobs) {
+Tree.prototype.createTree = function() {
 	var _this = this
 	var depsGlobs = makeDepsGlobs(this.deps, SUFFIXES)
 	var trees = _.flatten(_.map(depsGlobs, function(suffixGlobs, suffix) {
@@ -37,7 +37,7 @@ Tree.prototype.createTree = function(depsGlobs) {
 Tree.prototype.createConcat = function(globs, bundleName, suffix) {
 	var dest = path.join('styles', bundleName + '.' + suffix)
 	return SourcemapConcat(this.levelsTree, {
-		enabled: !!this.options.debug,
+		mapEnabled: !!this.options.debug,
 		files: globs,
 		dest: dest,
 		mapCommentType: 'block'

@@ -18,6 +18,9 @@ Tree.prototype.read = function(readTree) {
 			files: makeDepsGlobs(this.deps, SUFFIXES[0], true),
 			changeFileName: function(file) {
 				return path.join(path.dirname(file), path.basename(file, '.es6.js') + '.js')
+			},
+			es6to5: {
+				sourceMap: this.options.debug ? 'inline' : false
 			}
 		})
 	}

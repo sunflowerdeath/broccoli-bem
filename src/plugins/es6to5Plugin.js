@@ -18,7 +18,7 @@ Tree.prototype.processFileContent = function(content, relPath) {
 	var options = _.extend({}, this.options.es6to5, {
 		filename: relPath,
 		sourceMapName: relPath,
-		sourceFileName: relPath
+		sourceFileName: relPath,
 	})
 	try {
 		return transpiler.transform(content, options).code

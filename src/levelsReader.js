@@ -1,3 +1,4 @@
+var path = require('path')
 var _ = require('underscore')
 var mergeTrees = require('broccoli-merge-trees')
 var sieve = require('broccoli-file-sieve')
@@ -22,9 +23,11 @@ var LevelsReader = function(levels, deps, suffixes) {
 LevelsReader.prototype.read = function(readTree) {
 	var levelsTrees = _.map(this.levels, function(level, index) {
 		var globs = makeDepsGlobs(this.deps, this.suffixes, true)
+		var parts = level.split(path.sep)
+		var destDir = String(index) + '-' + parts[parts.length -1]
 		return sieve(level, {
 			files: globs,
-			destDir: index + ''
+			destDir: destDir
 		})
 	}, this)
 	var mergedTree = mergeTrees(levelsTrees)

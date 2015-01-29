@@ -45,6 +45,7 @@ Default: `[TODO]`
 Array of modules with technology builders.
 
 Example:
+
 ```js
 techsModules: [
   require('broccoli-bem-build-techs'),
@@ -52,8 +53,11 @@ techsModules: [
 ]
 ```
 
+
 Technology builders
 -------------------
+
+This is a description of how to add new technlogies.
 
 Technology builder is an object with the following properties:
 
@@ -64,26 +68,25 @@ Type: `function(levelsTree, deps, options)`
 Broccoli plugin that builds technology files.
 It takes the following arguments:
 
-**levelsTree** &mdash; Input tree with tech files from levels.
-
-**deps** &mdash; Object with dependencies.
-
-**options** &mdash; Builder's options.
+* **levelsTree** &ndash; Input tree with tech's files from the levels.
+* **deps** &ndash; Object with dependencies.
+* **options** &ndash; Builder's options.
 
 To find files of dependencies you can use function `makeDepsGlobs(deps, suffix, flatten)`.
 <br>
 It returns an object with lists of globs for each bundle.
-Globs are relative to the levelsDir.
+Globs are relative to the levelsTree.
 <br>
 Then you can pass this globs to some plugin supporting globs, or find files with e.g.
-[dirmatch](https://github.com/sunflowerdeath/dirmatch).
+[dirmatch](https://github.com/sunflowerdeath/dirmatch) and processes them.
 
 Example:
+
 ```js
-var MyTech = function() {
+var MyTech = function(levelsTree, deps, options) {
   this.levelsTree = levelsTree
   this.deps = deps
-  this.config = config
+  this.options = options
 }
 
 MyTech.prototype.read = function(readTree) {

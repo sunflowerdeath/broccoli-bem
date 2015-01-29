@@ -2,7 +2,8 @@
 
 ##BEM
 
-BEM — Block Element Modifier is a methodology, that helps you to achieve reusable components and code sharing in the front-end.
+BEM — Block Element Modifier is a methodology,
+that helps you to achieve reusable components and code sharing in the front-end.
 
 Read more here:
 http://getbem.com/introduction/
@@ -30,6 +31,7 @@ Directory structure inside levels doesn't matter, because file names are globall
 But usually blocks have separate folders and optionally subfolders for elements and modifiers.
 
 Example:
+
 ```
 level/
   block/
@@ -48,8 +50,8 @@ They contain list of dependencies to current block's items and to other blocks a
 Declarations files have extension `.decl.json`.
 
 Example:
-```json
-//button.decl.json
+```js
+// button.decl.json
 {
   "items": [
     "button__elem"
@@ -72,7 +74,7 @@ Declaration can specify that block should be built as separate bundle.
 Bundles are useful for separating common part of multiple pages or
 for deferring loading of some code.
 
-There are two types of bundles &mdash; static and deferred.
+There are two types of bundles &ndash; static and deferred.
 Static bundles are always loaded to page, deferred bundles are loaded only when needed.
 By default all blocks are built to single static bundle.
 
@@ -80,4 +82,4 @@ If block is built as separate bundle, it and its dependencies will no longer be 
 into next bundles.
 
 To build block as bundle you need to add to declaration `"bundle": true`.<br>
-For deferred bundle &mdash; `"bundle": true, "deferred": true`.
+For deferred bundle &ndash; `"bundle": true, "deferred": true`.

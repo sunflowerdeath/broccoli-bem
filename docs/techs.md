@@ -13,7 +13,7 @@ Styles for IE8 and IE9 are built separately.
 Options:
 
 * **debug** &ndash; When `true`, it builds files with sourcemaps.
-When `false`, it minifies scripts with clean-css.
+When `false`, it minifies styles with clean-css.
 
 ### scss
 

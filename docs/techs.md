@@ -24,7 +24,7 @@ It uses [node-sass](https://github.com/sass/node-sass).
 
 Mixins should be written in separate files with suffix `mix.scss`,
 because build result can consist of more than one bundle,
-and mixins should be available in the all bundles.
+and mixins should be available in all bundles.
 
 Mixins are included by name, without path:
 

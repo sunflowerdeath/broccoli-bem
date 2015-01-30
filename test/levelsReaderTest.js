@@ -27,7 +27,7 @@ describe('LevelsReader', function() {
 			.then(function(results) {
 				var outputDir = results.directory
 				var dirs = fs.readdirSync(outputDir)
-				assert.deepEqual(dirs, ['0', '1'])
+				assert.deepEqual(dirs, ['0-level1', '1-level2'])
 			})
 	})
 
@@ -38,8 +38,8 @@ describe('LevelsReader', function() {
 			.then(function(results) {
 				var outputDir = results.directory
 				var files = [
-					fs.readdirSync(path.join(outputDir, '0')),
-					fs.readdirSync(path.join(outputDir, '1'))
+					fs.readdirSync(path.join(outputDir, '0-level1')),
+					fs.readdirSync(path.join(outputDir, '1-level2'))
 				]
 				assert.deepEqual(files, [['block1.css'], ['block2.css']])
 			})

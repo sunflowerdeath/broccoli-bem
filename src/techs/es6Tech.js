@@ -1,5 +1,5 @@
 var path = require('path')
-var es6to5 = require('../plugins/es6to5Plugin')
+var es6to5 = require('../plugins/6to5Plugin')
 var makeDepsGlobs = require('../makeDepsGlobs')
 
 var SUFFIXES = ['es6.js']
@@ -29,9 +29,23 @@ Tree.prototype.read = function(readTree) {
 
 Tree.prototype.cleanup = function() {}
 
+var changeOptions = function(options) {
+	options.levels.unshift(path.resolve(__dirname, '../../vendor/6to5/6to5-browser-polyfill'))
+	return options
+}
+
+var changeDecls = function(reader, options) {
+	reader.changeDecl(options.blockName, function(origDecl) {
+		origDecl.blocks.unshift({name: '6to5-browser-polyfill'})
+		return origDecl
+	})
+}
+
 module.exports = {
 	Tree: Tree,
 	suffixes: SUFFIXES,
 	nextTechs: ['js'],
-	preprocessor: true
+	preprocessor: true,
+	changeOptions: changeOptions,
+	changeDecls: changeDecls
 }

@@ -33,4 +33,17 @@ describe('es6 tech', function() {
 			assert(js.indexOf('`') === -1)
 		})
 	})
+
+	it('builds 6to5-browser-polyfill', function() {
+		var options = _.defaults(OPTIONS, {
+			levels: [DIR]
+		})
+		var bem = Builder(options)
+
+		builder = new broccoli.Builder(bem)
+		return builder.build().then(function(result) {
+			var dir = result.directory
+			fs.existsSync(path.join(dir, 'scripts/6to5-browser-polyfill.js'))
+		})
+	})
 })

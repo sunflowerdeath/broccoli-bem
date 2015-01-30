@@ -59,7 +59,8 @@ describe('page tech', function() {
 		return builder.build().then(function(result) {
 			var dir = result.directory
 			var page = fs.readFileSync(path.join(dir, 'html', 'index.html'), 'utf8')
-			assert.equal(page, '/deploy/scripts/index.js\n/deploy/styles/index.css\n')
+			assert(page.indexOf('/deploy/scripts/index.js') !== -1)
+			assert(page.indexOf('/deploy/styles/index.css') !== -1)
 		})
 	})
 

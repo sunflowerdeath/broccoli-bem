@@ -57,48 +57,48 @@ describe('makeDeps', function() {
 		assert.deepEqual(deps.index, ['index', 'block', 'index__elem'])
 	})
 
-	var MODULES = {
+	var BUNDLES = {
 		index: {
 			blocks: [
-				{name: 'module'},
+				{name: 'bundle'},
 				{name: 'deferred'},
 				{name: 'block'}
 			],
 			items: []
 		},
-		module: {
-			module: true,
+		bundle: {
+			bundle: true,
 			blocks: [
 				{name: 'block'}
 			],
-			items: ['module__dep']
+			items: ['bundle__dep']
 		},
 		deferred: {
-			module: true,
+			bundle: true,
 			deferred: true,
 			blocks: [],
 			items: []
 		}
 	}
 
-	it('finds modules and deferred modules', function() {
+	it('finds bundles and deferred bundles', function() {
 		var reader = new DeclReader()
-		reader.decls = MODULES
+		reader.decls = BUNDLES
 		var deps = makeDeps('index', reader)
-		var modules = Object.keys(deps)
-		assert.deepEqual(modules, ['module', 'index', 'deferred'])
+		var bundles = Object.keys(deps)
+		assert.deepEqual(bundles, ['bundle', 'index', 'deferred'])
 	})
 	
-	it('modules does not include dependencies of previous modules', function() {
+	it('bundles does not include dependencies of previous bundles', function() {
 		var reader = new DeclReader()
-		reader.decls = MODULES
-		var moduleDeps = makeDeps('module', reader)
+		reader.decls = BUNDLES
+		var bundleDeps = makeDeps('bundle', reader)
 		var indexDeps = makeDeps('index', reader)
-		assert.deepEqual(_.difference(indexDeps.index, moduleDeps.module), indexDeps.index)
-		assert.deepEqual(indexDeps.module, moduleDeps.module)
+		assert.deepEqual(_.difference(indexDeps.index, bundleDeps.bundle), indexDeps.index)
+		assert.deepEqual(indexDeps.bundle, bundleDeps.bundle)
 	})
 	
-	var DEFERRED_MODULES = {
+	var DEFERRED_BUNDLES = {
 		index: {
 			blocks: [
 				{name: 'deferred'},
@@ -107,7 +107,7 @@ describe('makeDeps', function() {
 			items: []
 		},
 		deferred: {
-			module: true,
+			bundle: true,
 			deferred: true,
 			blocks: [
 				{name: 'block'},
@@ -117,21 +117,21 @@ describe('makeDeps', function() {
 		}
 	}
 
-	it('deferred modules include dependencies not included to static modules', function() {
+	it('deferred bundles include dependencies not included to static bundles', function() {
 		var reader = new DeclReader()
-		reader.decls = DEFERRED_MODULES
+		reader.decls = DEFERRED_BUNDLES
 		
 		var deferredDeps = makeDeps('deferred', reader) 
 		var indexDeps = makeDeps('index', reader)
 		
-		//deps of deferred module should be
-		//all deps of deferred module without deps included to index module
+		// Deps of deferred bundle should be
+		// all deps of deferred bundle without deps included to index bundle.
 		assert.deepEqual(
 			indexDeps.deferred,
 			_.difference(deferredDeps.deferred, indexDeps.index)
 		)
-		//in this example it means that block is not included to deferred module
-		//beacuse it is included already to index module
+		// In this example it means that block is not included to deferred bundle,
+		// beacuse it is included already to index bundle.
 		assert.deepEqual(indexDeps.deferred, ['block2', 'deferred'])
 	})
 	

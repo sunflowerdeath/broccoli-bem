@@ -98,17 +98,17 @@ function Builder(options) {
 	this.techs = moveNextTechsToPrev(this.techs)
 	for (var i in this.techs) {
 		var tech = this.techs[i]
-		if (tech.changeOptions) this.options = tech.changeOptions(options)
+		if (tech.changeOptions) this.options = tech.changeOptions(this.options)
 	}
 }
 
 Builder.prototype.read = function(readTree) {
 	var reader = new DeclReader(this.options.levels)
-	var deps = makeDeps(this.options.blockName, reader)
 	for (var i in this.techs) {
 		var tech = this.techs[i]
-		if (tech.changeDeps) deps = tech.changeDeps(deps, this.options, reader)
+		if (tech.changeDecls) tech.changeDecls(reader, this.options)
 	}
+	var deps = makeDeps(this.options.blockName, reader)
 	if (!_.isEqual(this.cachedDeps, deps)) {
 		this.cachedDeps = deps
 		this.cachedTree = buildTechs(this.options, this.techs, deps)

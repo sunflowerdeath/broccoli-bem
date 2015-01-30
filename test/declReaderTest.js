@@ -36,7 +36,8 @@ describe('DeclReader', function() {
 	describe('readDeclFromFiles', function() {
 		it('reads decl from file', function() {
 			var reader = new DeclReader(ONE_LEVEL)
-			var decl = reader.readDeclFromFiles('index')
+			reader.readDeclFromFiles('index')
+			var decl = reader.decls.index
 
 			assert.deepEqual(decl.blocks, [{name: 'block', items: ['block__elem']}])
 			assert.deepEqual(decl.items, ['index__elem'])
@@ -44,7 +45,8 @@ describe('DeclReader', function() {
 
 		it('merges decls from multiple files', function() {
 			var reader = new DeclReader(MULTIPLE_LEVELS)
-			var decl = reader.readDeclFromFiles('index')
+			reader.readDeclFromFiles('index')
+			var decl = reader.decls.index
 
 			assert.deepEqual(decl.items, ['index__elem', 'index__elem2'], 'items not merged')
 			
@@ -57,7 +59,8 @@ describe('DeclReader', function() {
 
 		it('returns initial decl when it has not file', function() {
 			var reader = new DeclReader(ONE_LEVEL)
-			var decl = reader.readDeclFromFiles('initial')
+			reader.readDeclFromFiles('initial')
+			var decl = reader.decls.initial
 			assert.deepEqual(decl, {items: [], blocks: []})
 		})
 
@@ -80,27 +83,21 @@ describe('DeclReader', function() {
 			var reader = new DeclReader(ONE_LEVEL)
 			
 			var traversed = []
-			reader.traverse('index', function(name, decl) {
-				traversed.push(name)
-			})
+			reader.traverse('index', function(name) { traversed.push(name) })
 			assert.deepEqual(traversed, ['index', 'block', 'block2', 'block__elem', 'index__elem'])
 		})
 
 		it('traverses deps only once', function() {
 			var reader = new DeclReader(TRAVERSE_ONCE)
 			var traversed = []
-			reader.traverse('index', function(name, decl) {
-				traversed.push(name)
-			})
+			reader.traverse('index', function(name) { traversed.push(name) })
 			assert.deepEqual(traversed, _.unique(traversed))
 		})
 
 		it('traverses recursively', function() {
 			var reader = new DeclReader(TRAVERSE_RECURSIVELY)
 			var traversed = []
-			reader.traverse('index', function(name, decl) {
-				traversed.push(name)
-			})
+			reader.traverse('index', function(name) { traversed.push(name) })
 			assert.deepEqual(traversed, ['index', 'block', 'block2'])
 		})
 
@@ -109,9 +106,7 @@ describe('DeclReader', function() {
 			
 			var spy = sinon.spy(reader, 'readDeclFromFiles')
 			var traversed = []
-			reader.traverse('index', function(name, decl) {
-				traversed.push(name)
-			})
+			reader.traverse('index', function(name) { traversed.push(name) })
 			assert.equal(spy.callCount, traversed.length)
 			assert.deepEqual(traversed, Object.keys(reader.decls))
 		})
@@ -119,11 +114,10 @@ describe('DeclReader', function() {
 		it('does not read decls when traversing again', function() {
 			var reader = new DeclReader(ONE_LEVEL)
 			
-			var spy = sinon.spy(reader, 'readDeclFromFiles')
 			reader.traverse('index', function() {})
-			var callCount = spy.callCount
+			var changedDecl = reader.decls.index = {}
 			reader.traverse('index', function() {})
-			assert.equal(spy.callCount, callCount)
+			assert.equal(reader.decls.index, changedDecl)
 		})
 	})
 })

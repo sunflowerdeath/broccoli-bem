@@ -43,7 +43,7 @@ DeclReader.prototype.traverse = function(name, callback, traversed) {
 
 	if (traversed.indexOf(name) !== -1) return
 
-	if (!this.decls[name]) this.decls[name] = this.readDeclFromFiles(name)
+	this.readDeclFromFiles(name)
 	var decl = this.decls[name]
 	var newDecl = callback(name, decl)
 	if (newDecl) decl = newDecl
@@ -64,12 +64,17 @@ DeclReader.prototype.traverse = function(name, callback, traversed) {
 	traversed.push(name)
 }
 
-/** Reads and parses declarations files. */
+DeclReader.prototype.changeDecl = function(name, callback) {
+	this.readDeclFromFiles(name)
+	this.decls[name] = callback(this.decls[name])
+}
+
+/** Reads, parses and stores declaration, if it is not already stored */
 DeclReader.prototype.readDeclFromFiles = function(name) {
+	if (this.decls[name]) return
+
 	var decl = {items: [], blocks: []}
 	var files = this.files[name]
-
-	if (!files) return decl
 
 	for (var i in files) {
 		var declPath = files[i]
@@ -85,7 +90,7 @@ DeclReader.prototype.readDeclFromFiles = function(name) {
 		}
 	}
 
-	return decl
+	this.decls[name] = decl
 }
 
 DeclReader.prototype.mergeDecls = function(target, source) {

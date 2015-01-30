@@ -108,15 +108,11 @@ describe('Builder', function() {
 	})
 
 
-	it('changes deps with techs "changeDeps" methods', function() {
-		var fakeChangedDeps = {}
-		
+	it('calls techs "changeDecl" methods', function() {
 		var fakeTech = {
 			suffixes: ['js'],
 			Tree: FakeTechTree,
-			changeDeps: sinon.spy(function() {
-				return fakeChangedDeps
-			})
+			changeDecls: sinon.spy(function() {})
 		}
 
 		var options = {
@@ -130,15 +126,10 @@ describe('Builder', function() {
 		
 		builder = new broccoli.Builder(bem)
 		return builder.build().then(function() {
-			// ChangeDeps is called
-			var args = fakeTech.changeDeps.lastCall.args
-			assert.equal(args[0], fakeDeps)
+			// ChangeDecls is called with reader and options
+			var args = fakeTech.changeDecls.lastCall.args
+			assert(args[0] instanceof FakeDeclReader)
 			assert(args[1].isOptions)
-			assert(args[2] instanceof FakeDeclReader)
-			
-			// Tech gets changed deps
-			var args = FakeTechTree.lastCall.args
-			assert.equal(args[1], fakeChangedDeps)
 		})
 	})
 
@@ -292,6 +283,7 @@ describe('Builder init', function() {
 		var tech = {
 			changeOptions: sinon.spy(function(options) {
 				options.changed = 'changed'
+				return options
 			})
 		}
 		sinon.spy(tech.changeOptions)
@@ -300,10 +292,11 @@ describe('Builder init', function() {
 			techModules: [
 				{tech: tech}
 			],
-			techs: ['tech']
+			techs: ['tech'],
+			isOptions: true
 		}
-		Builder(options)
-		assert(tech.changeOptions.calledWith(options))
-		assert.equal(options.changed, 'changed')
+		var builder = Builder(options)
+		assert(tech.changeOptions.lastCall.args[0].isOptions)
+		assert.equal(builder.options.changed, 'changed')
 	})
 })

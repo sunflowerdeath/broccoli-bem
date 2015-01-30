@@ -49,13 +49,17 @@ Tree.prototype.makeTree = function() {
 
 Tree.prototype.cleanup = function() {}
 
+var changeDecls = function(reader, options) {
+	reader.changeDecl(options.blockName, function(origDecl) {
+		origDecl.blocks.unshift({name: 'webfont'})
+		return origDecl
+	})
+}
+
 module.exports = {
 	preprocessor: true,
 	nextTechs: ['scss', 'img'],
 	suffixes: SUFFIXES,
 	Tree: Tree,
-	changeDeps: function(deps, options) {
-		deps[options.blockName].push('webfont')
-		return deps
-	}
+	changeDecls: changeDecls
 }

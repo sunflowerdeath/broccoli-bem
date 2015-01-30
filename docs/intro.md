@@ -1,6 +1,6 @@
-#Intro
+# Intro
 
-##BEM
+## BEM
 
 BEM — Block Element Modifier is a methodology,
 that helps you to achieve reusable components and code sharing in the front-end.
@@ -11,13 +11,13 @@ http://getbem.com/introduction/
 Or here:
 https://bem.info/
 
-##Filesystem organization
+## Filesystem organization
 
 BEM-projects require special filesystem organization to allow automating building process.
 
 broccoli-bem uses following conventions:
 
-###Levels
+### Levels
 
 Level is a directory with blocks and its elements and modifiers.
 You can use more than one level at the same time.
@@ -42,7 +42,7 @@ level/
       block__elem.js
 ```
 
-###Declarations
+### Declarations
 
 To describe dependencies of blocks there are special files called declarations of dependencies.
 Every block, element and modifier can have own declaration. 
@@ -50,6 +50,7 @@ They contain list of dependencies to current block's items and to other blocks a
 Declarations files have extension `.decl.json`.
 
 Example:
+
 ```js
 // button.decl.json
 {
@@ -68,7 +69,7 @@ Example:
 }
 ```
 
-###Bundles
+### Bundles
 
 Declaration can specify that block should be built as separate bundle.
 Bundles are useful for separating common part of multiple pages or

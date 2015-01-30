@@ -15,8 +15,8 @@ var makeSuffixDepsGlobs = function(deps, suffix, flatten) {
  * Makes glob patterns for all possible dependencies files.
  * @param deps {object} Bem deps.
  * @param suffixes {string|array.<string>} List of tech suffixes.
- * @return Object with array of globs for each module.
- * 	When suffixes is array, it returns object with results for every suffix.
+ * @return Object with array of globs for each bundle.
+ *   When suffixes is array, it returns object with results for every suffix.
  */
 var makeDepsGlobs = function(deps, suffixes, flatten) {
 	if (!Array.isArray(suffixes)) {

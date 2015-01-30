@@ -23,3 +23,7 @@ TODO
 * [API](#)
 * [List of techs](#)
 
+## License
+
+Public domain, see the `LICENCE.md` file.
+

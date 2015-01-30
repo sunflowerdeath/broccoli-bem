@@ -1,18 +1,16 @@
-API
-===
+# API
 
-Builder(options)
-----------------
+## Builder(options)
 
 Creates instance of builder plugin.
 
-###options.blockName
+### options.blockName
 
 Type: `string`
 
 Name of block to build.
 
-###options.deployPath
+### options.deployPath
 
 Type: `string`
 
@@ -20,7 +18,7 @@ Default: `/deploy`
 
 Path to built files in browser.
 
-###options.levels
+### options.levels
 
 Type: `array.<string>`
 
@@ -28,7 +26,7 @@ Default: `['/blocks']`
 
 Paths of levels directories.
 
-###options.techs
+### options.techs
 
 Type: `array.<string>`
 
@@ -36,7 +34,7 @@ Default: `[TODO]`
 
 List of used technologies.
 
-###options.techModules
+### options.techModules
 
 Type: `array.<object>`
 
@@ -54,14 +52,13 @@ techsModules: [
 ```
 
 
-Technology builders
--------------------
+## Technology builders
 
 This is a description of how to add new technlogies.
 
 Technology builder is an object with the following properties:
 
-###Tree
+### Tree
 
 Type: `function(levelsTree, deps, options)`
 
@@ -101,7 +98,7 @@ MyTech.prototype.read = function(readTree) {
 MyTech.prototype.cleanup = function() {}
 ```
 
-###suffixes
+### suffixes
 
 Type: `array`
 
@@ -109,7 +106,7 @@ List of tech files suffixes.
 
 Example: `['js', 'css']`
 
-###preprocessor
+### preprocessor
 
 Type: `boolean`
 
@@ -118,7 +115,7 @@ Default: `false`
 Is the technology a preprocessor.<br>
 Results of preprocessors are not included in the final build result.
 
-###postprocessor
+### postprocessor
 
 Type: `boolean`
 
@@ -127,7 +124,7 @@ Default: `false`
 Is the technology a postprocessor.<br>
 Results of postprocessors are replaced by results of processed technologies.
 
-###prevTechs
+### prevTechs
 
 Type: `array`
 
@@ -136,7 +133,7 @@ Default: `[]`
 List of technologies that are built before current.<br>
 LevelsTree of current technology contains its own files and files received as a result of building its previous technologies.
 
-###nextTechs
+### nextTechs
 
 Type: `array`
 
@@ -145,13 +142,13 @@ Default: `[]`
 List of technologies that are built after current.<br>
 LevelsTrees of next technologies will contain result of building current technology.
 
-###changeOptions
+### changeOptions
 
 Type: `function(options)`
 
 Function that can change builder's options.
 
-###changeDeps
+### changeDeps
 
 Type: `function(deps, options)`
 

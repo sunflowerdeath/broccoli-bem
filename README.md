@@ -7,7 +7,7 @@ Work in progress.
 ## Features
 
 * Simple BEM implementation, read more on the [Intro page](#).
-* Includes [set of basic technologies](#) and ability to plug-in more techs. 
+* Includes [set of basic technologies](#), and it is possible to plug-in more techs. 
 * Fast rebuilds with caching.
 * Sourcemaps in debug mode and minifying in production mode.
 

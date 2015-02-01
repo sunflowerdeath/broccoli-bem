@@ -3,6 +3,8 @@ var path = require('path')
 var _ = require('underscore')
 var glob = require('glob')
 
+var DECL_SUFFIX = 'deps.json' 
+
 var DeclReader = function(levels) {
 	this.levels = levels
 	this.decls = {}
@@ -14,7 +16,7 @@ DeclReader.prototype.findDeclFiles = function() {
 	var result = []
 
 	for (var i in this.levels) {
-		var declPattern = path.join(this.levels[i].trim(), '**/*.decl.json')
+		var declPattern = path.join(this.levels[i].trim(), '**/*.' + DECL_SUFFIX)
 		var files = glob.sync(declPattern)
 		result.push(files)
 	}
@@ -28,7 +30,7 @@ DeclReader.prototype.groupDeclFiles = function(files) {
 
 	for (var i in files) {
 		var filename = files[i]
-		var blockname = path.basename(filename, '.decl.json')
+		var blockname = path.basename(filename, '.' + DECL_SUFFIX)
 
 		if (!map[blockname]) map[blockname] = []
 		map[blockname].push(filename)

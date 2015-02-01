@@ -1,6 +1,6 @@
 # API
 
-## Builder(options)
+## bem(options)
 
 Creates instance of builder plugin.
 
@@ -44,7 +44,7 @@ Array of modules with technology builders.
 
 Example:
 
-```js
+```
 techsModules: [
   require('broccoli-bem-build-techs'),
   require('broccoli-bem-test-techs')
@@ -144,12 +144,12 @@ LevelsTrees of next technologies will contain result of building current technol
 
 ### changeOptions
 
-Type: `function(options)`
+Type: `function(options:object) -> newOptions:object`
 
 Function that can change builder's options.
 
-### changeDeps
+### changeDecls
 
-Type: `function(deps, options)`
+Type: `function(reader, options)`
 
-Function that can change deps.
+Function that can change dependency declarations.

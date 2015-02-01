@@ -24,7 +24,7 @@ describe('DeclReader', function() {
 		assert.deepEqual(keys, ['block', 'index'])
 		assert.equal(
 			path.normalize(files.block[0]),
-			path.normalize(path.join(ONE_LEVEL[0], 'block.decl.json'))
+			path.normalize(path.join(ONE_LEVEL[0], 'block.deps.json'))
 		)
 	})
 

@@ -40,10 +40,9 @@ Postprocessor for css technology.
 
 ### js
 
-It concatenates script files.
-Styles for IE8 and IE9 are built separately.
+Suffixes: `js`
 
-Suffixes: `js, ie8.js, ie9.js`
+It concatenates script files.
 
 Options:
 
@@ -53,11 +52,12 @@ When `false`, it minifies scripts with UglifyJS.
 
 ### es6
 
-Preprocessor for js technology, that compiles ES6 to ES5.
-
-_TODO polyfill_
-
 Suffixes: `es6.js`
+
+Preprocessor for js technology, that compiles ES6 to ES5 with 
+[6to5](https://6to5.org/).
+
+Also it automatically adds nessecary browser polyfill and runtime.
 
 
 # Images
@@ -68,29 +68,36 @@ It copies images and fonts to separate directory.
 
 Suffixes: `png, jpg, jpeg, ttf, woff, eot, svg`
 
-### sprite
-
-Not implemented
-
-Suffixes: `sprite.png`
-
 ### webfont
 
 Suffixes: `icon.svg`
 
 Technology that creates webfont from SVG icons.
 
-It also creates SCSS mixin to generate styles of icons:
+It also generates SCSS-mixin that inserts styles of icons:
 
 ```
 @import 'webfont.mix';
 
 .myicon {
-	@include webfont-icon('myicon');
+  @include webfont-icon('myicon');
 }
 ```
 
+### sprite
 
-# Page
+Not implemented yet
 
-_TODO_
+Suffixes: `sprite.png`
+
+
+# Templates
+
+## handlebarsPage
+
+Suffixes: `page.hbs, part.page.hbs`
+
+It renders handlebars templates to static html pages.
+
+Render context contains object `files` with lists of built files
+of every suffix (`js, css, ie8.css, ie9.css`).

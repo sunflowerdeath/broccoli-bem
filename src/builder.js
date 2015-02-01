@@ -5,12 +5,14 @@ var makeDeps = require('./makeDeps')
 var DeclReader = require('./declReader')
 var LevelsReader = require('./levelsReader')
 
+var DEFAULT_TECHS_MODULE = require('./techs')
+
 var DEFAULT_OPTIONS = {
-	deployPath: '/deploy',
-	techs: ['js', 'es6', 'scss', 'css', 'autoprefixer', 'webfont', 'img', 'page'],
+	deployPath: '/',
+	techs: _.keys(DEFAULT_TECHS_MODULE),
 	levels: ['blocks'],
 	techModules: [
-		require('./techs')
+		DEFAULT_TECHS_MODULE
 	]
 }
 
@@ -55,7 +57,7 @@ function runTechs(techsList, options, techs, deps, results) {
 
 		if (!tech) continue
 		if (results[techName]) continue
-		if (tech._mark) throw('Cycle on tech "' + techName + '"')
+		if (tech._mark) throw('Cyclic dependency on tech "' + techName + '"')
 
 		tech._mark = true
 		runTechs(tech.prevTechs, options, techs, deps, results)

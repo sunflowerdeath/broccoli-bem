@@ -6,8 +6,8 @@ var broccoli = require('broccoli')
 
 var Builder = require('../../src/builder')
 
-describe('page tech', function() {
-	var DIR = path.join(__dirname, 'pageTechTest')
+describe('handlebarsPage tech', function() {
+	var DIR = path.join(__dirname, 'handlebarsPageTechTest')
 	var builder
 
 	afterEach(function() {
@@ -16,8 +16,8 @@ describe('page tech', function() {
 
 	var OPTIONS = {
 		blockName: 'index',
-		techs: ['page'],
-		debug: true
+		debug: true,
+		techs: ['handlebarsPage']
 	}
 
 	it('renders templates', function() {
@@ -51,7 +51,7 @@ describe('page tech', function() {
 	it('makes object with files', function() {
 		var options = _.extend(OPTIONS, {
 			levels: [path.join(DIR, 'files')],
-			techs: ['page', 'css', 'js']
+			techs: ['handlebarsPage', 'css', 'js']
 		})
 
 		var bem = Builder(options)
@@ -59,8 +59,8 @@ describe('page tech', function() {
 		return builder.build().then(function(result) {
 			var dir = result.directory
 			var page = fs.readFileSync(path.join(dir, 'html', 'index.html'), 'utf8')
-			assert(page.indexOf('/deploy/scripts/index.js') !== -1)
-			assert(page.indexOf('/deploy/styles/index.css') !== -1)
+			assert(page.indexOf('/scripts/index.js') !== -1)
+			assert(page.indexOf('/styles/index.css') !== -1)
 		})
 	})
 

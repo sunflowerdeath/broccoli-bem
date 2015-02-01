@@ -33,11 +33,9 @@ describe('js tech', function() {
 		return builder.build().then(function(result) {
 			var dir = result.directory
 			var index = fs.readFileSync(path.join(dir, 'scripts/index.js'), 'utf8')
-			var ie8 = fs.readFileSync(path.join(dir, 'scripts/index.ie8.js'), 'utf8')
 			var bundle = fs.readFileSync(path.join(dir, 'scripts/bundle.js'), 'utf8')
 			assert(!checkOccurence(index, ['var DEBUG = true']))
 			assert(checkOccurence(index, ['block', 'block__elem', 'index', 'index__elem']))
-			assert(checkOccurence(ie8, ['indexie8']), 'browser specific code is built separately')
 			assert(checkOccurence(bundle, ['bundle']), 'bundles are built separately')
 		})
 	})

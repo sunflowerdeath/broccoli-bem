@@ -15,12 +15,11 @@ https://bem.info/
 
 ## Features
 
-* Simple BEM implementation, read more on the [Projects structure](#).
-* Includes set of basic technologies:
-	* builders: `js, css, images`
-	* pre- and postprocessors: `scss, autoprefixer, es6`
-	
-	[List of technologies](#)
+* Simple BEM implementation, read more on the 
+	[Projects structure](https://github.com/sunflowerdeath/broccoli-bem/blob/master/docs/projects.md).
+* Includes set of basic technologies: `js, css, handlebars, img`;
+	pre- and postprocessors: `scss, autoprefixer, es6`.
+	([List of technologies](https://github.com/sunflowerdeath/broccoli-bem/blob/master/docs/techs.md))
 * Sourcemaps in debug mode and minifying in production mode.
 * It is possible to plug-in additional techs as separate modules.
 * Fast rebuilds with caching.
@@ -52,9 +51,9 @@ or `broccoli build dest-dir` to build files to directory.
 
 ## Documentation
 
-* [Projects structure](#)
-* [API](#)
-* [List of technologies](#)
+* [Projects structure](https://github.com/sunflowerdeath/broccoli-bem/blob/master/docs/projects.md)
+* [API](https://github.com/sunflowerdeath/broccoli-bem/blob/master/docs/api.md)
+* [List of technologies](https://github.com/sunflowerdeath/broccoli-bem/blob/master/docs/techs.md)
 
 ## License
 

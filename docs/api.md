@@ -14,7 +14,7 @@ Name of block to build.
 
 Type: `string`
 
-Default: `/deploy`
+Default: `/`
 
 Path to built files in browser.
 
@@ -30,7 +30,7 @@ Paths of levels directories.
 
 Type: `array.<string>`
 
-Default: `[TODO]`
+Default: all default technologies
 
 List of used technologies.
 
@@ -38,18 +38,9 @@ List of used technologies.
 
 Type: `array.<object>`
 
-Default: `[TODO]`
+Default: `[ require('broccoli-bem/techs') ]` (module with default technologies)
 
 Array of modules with technology builders.
-
-Example:
-
-```
-techsModules: [
-  require('broccoli-bem-build-techs'),
-  require('broccoli-bem-test-techs')
-]
-```
 
 
 ## Technology builders

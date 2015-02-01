@@ -6,7 +6,7 @@ var renderHandlebars = require('broccoli-render-handlebars')
 
 var makeDepsGlobs = require('../makeDepsGlobs')
 
-var SUFFIXES = ['hbs', 'part.hbs']
+var SUFFIXES = ['page.hbs', 'part.page.hbs']
 
 var Tree = function(levelsTree, deps, options) {
 	this.levelsTree = levelsTree
@@ -19,10 +19,11 @@ Tree.prototype.description = 'Page tech'
 Tree.prototype.read = function(readTree) {
 	return readTree(this.levelsTree).then(function(srcDir) {
 		var renderTree = renderHandlebars(this.levelsTree, {
-			files: ['**/' + this.options.blockName + '.hbs'],
-			partials: makeDepsGlobs(this.deps, 'part.hbs', true),
-			makePartialName: function(file) { return path.basename(file, '.hbs') },
-			context: this.makeRenderCtx(srcDir)
+			files: makeDepsGlobs(this.deps, 'page.hbs', true),
+			partials: makeDepsGlobs(this.deps, 'part.page.hbs', true),
+			makePartialName: function(file) { return path.basename(file, '.part.page.hbs') },
+			changeFileName: function(file) { return path.basename(file, '.page.hbs') + '.html' },
+			context: this.makeRenderCtx(srcDir),
 		})
 		var deployTree = sieve(renderTree, {
 			files: ['**/*.html'],
@@ -35,7 +36,7 @@ Tree.prototype.read = function(readTree) {
 
 Tree.prototype.makeRenderCtx = function(srcDir) {
 	var deployPath = this.options.deployPath
-	var suffixes = ['js', 'ie8.js', 'ie9.js', 'css', 'ie8.css', 'ie9.css']
+	var suffixes = ['js', 'css', 'ie8.css', 'ie9.css']
 	var modules = _.keys(this.deps)
 	var files = {}
 	_.each(suffixes, function(suffix) {

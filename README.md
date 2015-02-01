@@ -59,5 +59,4 @@ or `broccoli build dest-dir` to build files to directory.
 
 Public domain, see the `LICENCE.md` file.
 
-`vendor` directory contains third-party software with different licenses and
-copies of their license files.
+`vendor` directory contains third-party software and copies of their license files.

@@ -24,7 +24,7 @@ https://bem.info/
 * Sourcemaps in debug mode and minifying in production mode.
 * It is possible to plug-in additional techs as separate modules.
 * Fast rebuilds with caching.
-* Dev-server and LiveReload as built-in to Broccoli feature.
+* Development server and LiveReload as built-in to Broccoli feature.
 
 ## Usage
 
@@ -32,6 +32,7 @@ First you need to install broccoli and broccoli-bem:
 
 ```
 npm install broccoli
+npm install --global broccoli-cli
 npm install broccoli-bem
 ```
 
@@ -53,7 +54,7 @@ or `broccoli build dest-dir` to build files to directory.
 
 * [Projects structure](#)
 * [API](#)
-* [List of techs](#)
+* [List of technologies](#)
 
 ## License
 

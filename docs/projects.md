@@ -57,7 +57,7 @@ Example:
 }
 ```
 
-Build order is like this:
+Build order is as follows:
 
 * Other blocks and their elements and modifiers
 * Current block (You don't need to specify this dependency)

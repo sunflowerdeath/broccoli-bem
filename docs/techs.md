@@ -1,6 +1,5 @@
 # List of technologies
 
-
 ## Styles
 
 ### css
@@ -83,7 +82,7 @@ Technology that creates webfont from SVG icons.
 
 It also creates SCSS mixin to generate styles of icons:
 
-```scss
+```
 @import 'webfont.mix';
 
 .myicon {

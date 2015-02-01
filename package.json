@@ -2,9 +2,13 @@
   "name": "broccoli-bem",
   "version": "0.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "mocha test test/techsTest test/pluginsTest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sunflowerdeath/broccoli-bem"
   },
   "author": "sunflowerdeath",
   "license": "public domain",

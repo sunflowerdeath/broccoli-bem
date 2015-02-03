@@ -44,7 +44,9 @@ Tree.prototype.makeRenderCtx = function(srcDir) {
 			return path.join('**', module + '.' + suffix)
 		})
 		files[suffix] = _.map(dirmatch(srcDir, globs), function(file) {
-			return path.join(deployPath, file) //TODO hashes
+			return path.join(deployPath, file)
+				.replace(/\\/g, '/') // Fix for windows
+			//TODO: hashes
 		})
 	})
 	return {files: files}

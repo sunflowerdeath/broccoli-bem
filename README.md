@@ -1,5 +1,7 @@
 # broccoli-bem
 
+[![Build Status](https://travis-ci.org/sunflowerdeath/broccoli-bem.svg?branch=master)](https://travis-ci.org/sunflowerdeath/broccoli-bem)
+
 This is a plugin for building BEM projects with Broccoli.
 
 ## BEM

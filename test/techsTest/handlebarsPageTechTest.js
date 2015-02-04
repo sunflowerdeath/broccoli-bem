@@ -64,4 +64,19 @@ describe('handlebarsPage tech', function() {
 		})
 	})
 
+	it('makes hashes of files', function() {
+		var options = _.extend(OPTIONS, {
+			levels: [path.join(DIR, 'files')],
+			techs: ['handlebarsPage', 'css', 'js']
+		})
+
+		var bem = Builder(options)
+		builder = new broccoli.Builder(bem)
+		return builder.build().then(function(result) {
+			var dir = result.directory
+			var page = fs.readFileSync(path.join(dir, 'html', 'index.html'), 'utf8')
+			assert(page.match(/index\.js\?[0-9a-f]{32}/gi))
+		})
+	})
+
 })

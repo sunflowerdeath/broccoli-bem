@@ -1,3 +1,5 @@
+var crypto = require('crypto')
+var fs = require('fs')
 var path = require('path')
 var _ = require('underscore')
 var dirmatch = require('dirmatch')
@@ -35,7 +37,7 @@ Tree.prototype.read = function(readTree) {
 }
 
 Tree.prototype.makeRenderCtx = function(srcDir) {
-	var deployPath = this.options.deployPath
+	var _this = this
 	var suffixes = ['js', 'css', 'ie8.css', 'ie9.css']
 	var modules = _.keys(this.deps)
 	var files = {}
@@ -44,15 +46,20 @@ Tree.prototype.makeRenderCtx = function(srcDir) {
 			return path.join('**', module + '.' + suffix)
 		})
 		files[suffix] = _.map(dirmatch(srcDir, globs), function(file) {
-			return path.join(deployPath, file)
-				.replace(/\\/g, '/') // Fix for windows
-			//TODO: hashes
+			var url = path.join(_this.options.deployPath, file)
+			url = url.replace(/\\/g, '/') // Fix for windows
+			if (_this.options.debug) url += '?' + hashFile(path.join(srcDir, file))
+			return url
 		})
 	})
 	return {files: files}
 }
 
 Tree.prototype.cleanup = function() {}
+
+var hashFile = function(file) {
+	return crypto.createHash('md5').update(fs.readFileSync(file)).digest('hex')
+}
 
 module.exports = {
 	Tree: Tree,

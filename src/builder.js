@@ -110,11 +110,14 @@ Builder.prototype.read = function(readTree) {
 		var tech = this.techs[i]
 		if (tech.changeDecls) tech.changeDecls(reader, this.options)
 	}
+
 	var deps = makeDeps(this.options.blockName, reader)
+
 	if (!_.isEqual(this.cachedDeps, deps)) {
 		this.cachedDeps = deps
 		this.cachedTree = buildTechs(this.options, this.techs, deps)
 	}
+
 	return readTree(this.cachedTree)
 }
 

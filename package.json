@@ -4,7 +4,8 @@
   "description": "Plugin for building BEM projects with Broccoli",
   "main": "src/index.js",
   "scripts": {
-    "test": "mocha test test/techsTest test/pluginsTest"
+    "test": "mocha test test/techsTest test/pluginsTest",
+    "cov": "istanbul cover node_modules/.bin/_mocha -- test test/techsTest test/pluginsTest"
   },
   "repository": {
     "type": "git",
@@ -16,7 +17,7 @@
   "author": "sunflowerdeath",
   "license": "public domain",
   "dependencies": {
-    "6to5": "^3.0.10",
+    "babel": "^4.7.16",
     "broccoli-autoprefixer": "^2.1.0",
     "broccoli-clean-css": "^1.0.0",
     "broccoli-file-sieve": "^0.1.0",

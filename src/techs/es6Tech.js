@@ -1,5 +1,5 @@
 var path = require('path')
-var es6to5 = require('../plugins/6to5Plugin')
+var es6to5 = require('../plugins/babelPlugin')
 var makeDepsGlobs = require('../makeDepsGlobs')
 
 var SUFFIXES = ['es6.js']
@@ -30,13 +30,13 @@ Tree.prototype.read = function(readTree) {
 Tree.prototype.cleanup = function() {}
 
 var changeOptions = function(options) {
-	options.levels.unshift(path.resolve(__dirname, '../../vendor/6to5/6to5-browser-polyfill'))
+	options.levels.unshift(path.resolve(__dirname, '../../vendor/babel/babel-browser-polyfill'))
 	return options
 }
 
 var changeDecls = function(reader, options) {
 	reader.changeDecl(options.blockName, function(origDecl) {
-		origDecl.blocks.unshift({name: '6to5-browser-polyfill'})
+		origDecl.blocks.unshift({name: 'babel-browser-polyfill'})
 		return origDecl
 	})
 }

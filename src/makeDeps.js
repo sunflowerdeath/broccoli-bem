@@ -1,5 +1,30 @@
 var _ = require('underscore')
 
+/**
+ * @param declName {string}
+ * @param reader {DeclReader}
+ * @return List of deps of each bundle.
+ */
+function makeDeps(declName, reader) {
+	var declsData = getDeclsData(declName, reader)
+	var bundles = declsData.bundles
+	var deferredBundles = declsData.deferredBundles
+	var decls = declsData.decls
+	var deps = {}
+
+	bundles = _.union(bundles, [declName], deferredBundles)
+
+	for (var i in bundles) {
+		var bundleName = bundles[i]
+		var deferred = deferredBundles.indexOf(bundleName) != -1
+		var bundleDeps = makeDeclDeps(bundleName, decls, deferred, deferredBundles)
+		// Deps of bundle are its deps without deps of prev bundles.
+		deps[bundleName] = _.difference(bundleDeps, _.flatten(_.values(deps)))
+	}
+
+	return deps
+}
+
 function getDeclsData(declName, reader) {
 	var data = {
 		decls: {},
@@ -44,31 +69,6 @@ function makeItemsDeps(items, decls, deferred, deferredBundles) {
 		deps = deps.concat(makeDeclDeps(item, decls, deferred, deferredBundles))
 		deps.push(item)
 	}
-	return deps
-}
-
-/**
- * @param declName {string}
- * @param reader {DeclReader}
- * @return List of deps of each bundle.
- */
-function makeDeps(declName, reader) {
-	var declsData = getDeclsData(declName, reader)
-	var bundles = declsData.bundles
-	var deferredBundles = declsData.deferredBundles
-	var decls = declsData.decls
-	var deps = {}
-
-	bundles = _.union(bundles, [declName], deferredBundles)
-
-	for (var i in bundles) {
-		var bundleName = bundles[i]
-		var deferred = deferredBundles.indexOf(bundleName) != -1
-		var bundleDeps = makeDeclDeps(bundleName, decls, deferred, deferredBundles)
-		// Deps of bundle are its deps without deps of prev bundles.
-		deps[bundleName] = _.difference(bundleDeps, _.flatten(_.values(deps)))
-	}
-
 	return deps
 }
 

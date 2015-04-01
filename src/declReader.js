@@ -39,7 +39,10 @@ DeclReader.prototype.groupDeclFiles = function(files) {
 	return map
 }
 
-/** Traverses declaration and all its dependencies recursively. */
+/**
+ * Traverses declaration and all its dependencies recursively.
+ * Callback can return decl and it will replace original decl.
+ */
 DeclReader.prototype.traverse = function(name, callback, traversed) {
 	if (traversed === undefined) traversed = []
 

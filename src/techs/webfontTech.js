@@ -8,6 +8,13 @@ var sourcemapConcat = require('../plugins/sourcemapConcatPlugin')
 
 var SUFFIXES = ['icon.svg']
 
+var changeDecls = function(reader, options) {
+	reader.changeDecl(options.blockName, function(decl) {
+		decl.blocks.unshift({name: 'webfont'})
+		return decl
+	})
+}
+
 function Tree(levelsTree, deps, options) {
 	this.levelsTree = levelsTree
 	this.deps = deps
@@ -48,13 +55,6 @@ Tree.prototype.makeTree = function() {
 }
 
 Tree.prototype.cleanup = function() {}
-
-var changeDecls = function(reader, options) {
-	reader.changeDecl(options.blockName, function(origDecl) {
-		origDecl.blocks.unshift({name: 'webfont'})
-		return origDecl
-	})
-}
 
 module.exports = {
 	preprocessor: true,

@@ -30,7 +30,7 @@ Paths of levels directories.
 
 Type: `array.<string>`
 
-Default: all default technologies
+Default: all technologies
 
 List of used technologies.
 

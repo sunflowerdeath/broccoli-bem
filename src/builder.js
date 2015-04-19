@@ -125,4 +125,6 @@ Builder.prototype.read = function(readTree) {
 
 Builder.prototype.cleanup = function() {}
 
+Builder.techs = DEFAULT_TECHS_MODULE
+
 module.exports = Builder

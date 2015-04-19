@@ -1,6 +1,6 @@
 {
   "name": "broccoli-bem",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Plugin for building BEM projects with Broccoli",
   "main": "src/index.js",
   "scripts": {

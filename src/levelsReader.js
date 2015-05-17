@@ -21,14 +21,13 @@ var LevelsReader = function(levels, deps, suffixes) {
 
 LevelsReader.prototype.read = function(readTree) {
 	var levelsTrees = _.map(this.levels, function(level, index) {
-		// First find all suffix files for performance optimisation
+		// First find all suffix files for performance optimization
 		var suffixGlobs = this.suffixes.map(function(suffix) { return '**/*.' + suffix })
 		var suffixSieve = sieve(level, {files: suffixGlobs})
 
 		var depsGlobs = makeDepsGlobs(this.deps, this.suffixes, true)
 
-		// Remove ':' and replace '..' with two dots symbol,
-		// because windows don't like it.
+		// Remove ':' and replace '..' with two dots symbol
 		var name = level.slice(-30)
 			.replace(/\\|\//g, '-')
 			.replace(/:/g, '')

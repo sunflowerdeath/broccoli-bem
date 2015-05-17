@@ -3,7 +3,7 @@ var path = require('path')
 var _ = require('underscore')
 var glob = require('glob')
 
-var DECL_SUFFIX = 'deps.json' 
+var DECL_SUFFIX = 'deps.json'
 
 var DeclReader = function(levels) {
 	this.levels = levels
@@ -61,7 +61,7 @@ DeclReader.prototype.traverse = function(name, callback, traversed) {
 			this.traverse(block.items[j], callback, traversed)
 		}
 	}
-	
+
 	for (i in decl.items) {
 		this.traverse(decl.items[i], callback, traversed)
 	}
@@ -90,7 +90,7 @@ DeclReader.prototype.readDeclFromFiles = function(name) {
 		try {
 			var json = JSON.parse(file)
 			this.mergeDecls(decl, json)
-		} catch(e) {
+		} catch (e) {
 			throw new Error('Can\'t parse JSON in file "' + declPath + '"')
 		}
 	}

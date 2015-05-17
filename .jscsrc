@@ -1,0 +1,12 @@
+{
+	"preset": "airbnb",
+	"validateLineBreaks": null,
+	"disallowMultipleLineBreaks": null,
+	"disallowMultipleVarDecl": null,
+	"requirePaddingNewLinesBeforeLineComments": null,
+	"requirePaddingNewLinesAfterBlocks": null,
+	"esnext": true,
+	"disallowMultipleLineStrings": true,
+	"disallowNewlineBeforeBlockStatements": true,
+	"validateIndentation": "\t"
+}

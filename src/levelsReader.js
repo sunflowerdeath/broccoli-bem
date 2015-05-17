@@ -26,7 +26,7 @@ LevelsReader.prototype.read = function(readTree) {
 		var suffixSieve = sieve(level, {files: suffixGlobs})
 
 		var depsGlobs = makeDepsGlobs(this.deps, this.suffixes, true)
-		//
+
 		// Remove ':' and replace '..' with two dots symbol,
 		// because windows don't like it.
 		var name = level.slice(-30)

@@ -14,11 +14,12 @@ describe('LevelsReader', function() {
 	var DEPS = {
 		index: ['block1', 'block2']
 	}
-	
+
 	var builder
-  afterEach(function() {
-    if (builder) builder.cleanup()
-  })
+
+	afterEach(function() {
+		if (builder) builder.cleanup()
+	})
 
 	it('creates dir with levels dirs named from 0', function() {
 		var tree = LevelsReader(LEVELS, DEPS, ['css'])
@@ -27,7 +28,8 @@ describe('LevelsReader', function() {
 			.then(function(results) {
 				var outputDir = results.directory
 				var dirs = fs.readdirSync(outputDir)
-				assert.deepEqual(dirs, ['0-level1', '1-level2'])
+				assert.equal(dirs[0][0], '0')
+				assert.equal(dirs[1][0], '1')
 			})
 	})
 
@@ -37,9 +39,10 @@ describe('LevelsReader', function() {
 		return builder.build()
 			.then(function(results) {
 				var outputDir = results.directory
+				var dirs = fs.readdirSync(outputDir)
 				var files = [
-					fs.readdirSync(path.join(outputDir, '0-level1')),
-					fs.readdirSync(path.join(outputDir, '1-level2'))
+					fs.readdirSync(path.join(outputDir, dirs[0])),
+					fs.readdirSync(path.join(outputDir, dirs[1]))
 				]
 				assert.deepEqual(files, [['block1.css'], ['block2.css']])
 			})

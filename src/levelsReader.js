@@ -30,6 +30,7 @@ LevelsReader.prototype.read = function(readTree) {
 		// Remove ':' and replace '..' with two dots symbol,
 		// because windows don't like it.
 		var name = level.slice(-30)
+			.replace(/\\|\//g, '-')
 			.replace(/:/g, '')
 			.replace(/\.\./g, '\u2025')
 		if (level.length > 30) name = '~' + name

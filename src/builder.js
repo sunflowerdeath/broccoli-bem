@@ -83,7 +83,12 @@ function runTechs(techsList, options, techs, deps, results) {
 function Builder(options) {
 	if (!(this instanceof Builder)) return new Builder(options)
 	this.options = _.extend({}, DEFAULT_OPTIONS, options)
-	this.techs = _.extend.apply(_, this.options.techModules)
+
+	this.techs = {}
+	for (var i in this.options.techModules) {
+		_.extend(this.techs, this.options.techModules[i])
+	}
+
 	if (!this.options.techs) this.options.techs = Object.keys(this.techs)
 
 	if (!this.options.blockName) {

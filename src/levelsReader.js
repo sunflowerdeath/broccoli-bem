@@ -1,4 +1,3 @@
-var path = require('path')
 var _ = require('underscore')
 var mergeTrees = require('broccoli-merge-trees')
 var sieve = require('broccoli-file-sieve')
@@ -27,8 +26,15 @@ LevelsReader.prototype.read = function(readTree) {
 		var suffixSieve = sieve(level, {files: suffixGlobs})
 
 		var depsGlobs = makeDepsGlobs(this.deps, this.suffixes, true)
-		var parts = level.split(path.sep)
-		var destDir = String(index) + '-' + parts[parts.length -1]
+		//
+		// Remove ':' and replace '..' with two dots symbol,
+		// because windows don't like it.
+		var name = level.slice(-30)
+			.replace(/:/g, '')
+			.replace(/\.\./g, '\u2025')
+		if (level.length > 30) name = '~' + name
+
+		var destDir = String(index) + '-' + name
 		return sieve(suffixSieve, {
 			files: depsGlobs,
 			destDir: destDir
